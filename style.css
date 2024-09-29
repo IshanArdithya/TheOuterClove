@@ -533,8 +533,21 @@ a.bordered-btn:hover {
   transform: scale(102%);
 }
 
-.product a:link,
-.product a:visited {
+.product-btn {
+  color: #ececec;
+  display: inline-block;
+  text-decoration: none;
+  background-color: var(--main-theme-color);
+  padding: 1.2rem 3rem;
+  border-radius: 1rem;
+  margin-top: auto;
+  font-size: 14px;
+  transition: all 0.2s;
+  border: none;
+}
+
+.product-btn:link,
+.product-btn:visited {
   color: #ececec;
   display: inline-block;
   text-decoration: none;
@@ -546,7 +559,7 @@ a.bordered-btn:hover {
   transition: all 0.2s;
 }
 
-.product a:hover {
+.product-btn:hover {
   transform: scale(103%);
 }
 

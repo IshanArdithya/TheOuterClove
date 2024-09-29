@@ -1,0 +1,480 @@
+/* Imported fonts from local files */
+@font-face {
+  font-family: "Bree Serif";
+  src: url(fonts/Bree_Serif/BreeSerif-Regular.ttf);
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url(fonts/Open_Sans/OpenSans-VariableFont_wdth\wght.ttf);
+  font-weight: 300 800;
+}
+
+@font-face {
+  font-family: "Caveat";
+  src: url(fonts/Caveat/Caveat-VariableFont_wght.ttf);
+  font-weight: 400 700;
+}
+
+
+
+:root {
+  --color-primary: #2095ae;
+  --color-danger: #2b5de5;
+  --color-success: #1B9C85;
+  --color-warning: #F7D060;
+  --color-white: #fff;
+  --color-info-dark: #7d8da1;
+  --color-dark: #363949;
+  --color-light: rgba(132, 139, 200, 0.18);
+  --color-dark-variant: #677483;
+  --color-background: #f6f6f9;
+
+  --card-border-radius: 2rem;
+  --border-radius-1: 0.4rem;
+  --border-radius-2: 1.2rem;
+
+  --card-padding: 1.8rem;
+  --padding-1: 1.2rem;
+
+  --box-shadow: 0 2rem 3rem var(--color-light);
+
+  --main-theme-color: #f38122;
+  --pg-main-color1: #f8f9fa;
+  --pg-main-color2: #fff;
+  --navbar-color: #cfcfcf;
+  --footer-p-color: #ffffffa7;
+  --button-hover-color: #e96300;
+  --about-color: #a56027c8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  appearance: none;
+  border: none;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.88rem;
+  user-select: none;
+  overflow-x: hidden;
+  color: var(--color-dark);
+  background-color: var(--color-background);
+}
+
+a {
+  color: var(--color-dark);
+}
+
+h1 {
+  font-weight: 800;
+  font-size: 1.8rem;
+}
+
+h2 {
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+h3 {
+  font-weight: 500;
+  font-size: 0.87rem;
+}
+
+small {
+  font-size: 0.76rem;
+}
+
+p {
+  color: var(--color-dark-variant);
+}
+
+b {
+  color: var(--color-dark);
+}
+
+.text-muted {
+  color: var(--color-info-dark);
+}
+
+.primary {
+  color: var(--color-primary);
+}
+
+.danger {
+  color: var(--color-danger);
+}
+
+.success {
+  color: var(--color-success);
+}
+
+.warning {
+  color: var(--color-warning);
+}
+
+
+
+.container {
+  display: grid;
+  width: 96%;
+  margin: 0 auto;
+  gap: 1.8rem;
+  grid-template-columns: 12rem auto 23rem;
+}
+
+/* ------------------- Navigation Bar ------------------- */
+
+.navbar-logo {
+  font-family: "Bree Serif", "Open Sans", Arial, sans-serif;
+  text-transform: none;
+  text-decoration: none;
+  color: var(--color-dark);
+  letter-spacing: 5px;
+  font-size: 22px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.navbar-logo:hover {
+  color: var(--main-theme-color);
+}
+
+.theme-accent-color {
+  color: var(--main-theme-color) !important;
+}
+
+.navbar {
+  display: flex;
+}
+
+.navbar a {
+  position: relative;
+  font-family: "Bree Serif", "Open Sans", Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: var(--color-dark);
+  font-weight: 550;
+  text-decoration: none;
+  margin-left: 40px;
+  text-transform: uppercase;
+}
+
+.navbar a::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #ffffff;
+  transition: 0.3s;
+}
+
+.navbar a:hover::before {
+  width: 100%;
+  background-color: var(--main-theme-color);
+}
+
+.navbar a.active,
+.icons a.active {
+  color: var(--main-theme-color);
+}
+
+.navbar a.active::before {
+  width: 100%;
+  background-color: var(--main-theme-color);
+}
+
+.active {
+  display: block;
+}
+
+.icons.hideit {
+  visibility: hidden;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 600, "GRAD" 0, "opsz" 24;
+  color: var(--color-dark);
+  transition: color 0.3s;
+  font-size: 25px;
+}
+
+.material-symbols-outlined:hover {
+  color: var(--main-theme-color);
+}
+
+.icons {
+  float: right;
+  display: flex;
+  align-items: center;
+  margin-right: 2vh;
+}
+
+.icons a {
+  margin-left: 20px;
+  margin-right: 07px;
+  text-decoration: none;
+}
+
+main {
+  margin-top: 1.4rem;
+  flex: 1;
+  padding: 20px;
+}
+
+main .recent {
+  margin-top: 1.3rem;
+}
+
+main .recents h2 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+main .recents table {
+  background-color: var(--color-white);
+  width: 100%;
+  padding: var(--card-padding);
+  text-align: center;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--card-border-radius);
+  transition: all 0.3s ease;
+}
+
+main .recents table:hover {
+  box-shadow: none;
+}
+
+main .recents table tbody td {
+  height: 2.8rem;
+  border-bottom: 1px solid var(--color-light);
+  color: var(--color-dark-variant);
+}
+
+main .recents table tbody tr:last-child td {
+  border: none;
+}
+
+
+/* Buttons */
+
+.btn-primary {
+  align-items: right;
+  justify-content: right;
+  text-decoration: none;
+  border-radius: 10px;
+  color: rgb(255, 255, 255);
+  background: rgb(31, 68, 117);
+  padding: 8px;
+  margin: 1px;
+}
+
+.btn-primary:hover {
+  background-color: #5fc2e4;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-secondary,
+.btn-danger {
+  padding: 8px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background-color: #0e7c20;
+}
+
+.btn-danger {
+  background-color: rgb(212, 29, 29);
+}
+
+.btn-secondary:hover {
+  background-color: #4bd489;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+
+.btn-danger:hover {
+  background-color: #ec5d5d;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.productimg {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+#addproducts-form {
+  background-color: var(--color-white);
+  width: 100%;
+  padding: var(--card-padding);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--card-border-radius);
+  transition: all 0.3s ease;
+}
+
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.form-inputs {
+  width: 65%;
+}
+
+#addproducts-form label,
+#addproducts-form input,
+#addproducts-form textarea,
+#addproducts-form button {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+#addproducts-form input,
+#addproducts-form textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+#addproducts-form textarea {
+  resize: vertical;
+  min-height: 50px;
+  max-height: 80px;
+}
+
+#addproducts-form button {
+  background-color: #0e7c20;
+  color: rgb(255, 255, 255);
+  border-radius: 4px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+#addproducts-form button:hover {
+  opacity: 90%;
+}
+
+.image-preview {
+  width: 30%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  margin-left: 1rem;
+  align-self: center;
+}
+
+.image-preview img,
+.update-product-image img {
+  max-width: 100%;
+  max-height: 250px;
+  display: block;
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+.image-preview p {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+#addproduct_image {
+  display: none !important;
+}
+
+.file-input-container {
+  display: flex !important;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.custom-file-upload {
+  background-color: var(--color-dark-variant);
+  color: #fff;
+  width: 30% !important;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.custom-file-upload:hover {
+  opacity: 90%;
+}
+
+#file-name {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #333;
+  margin-left: 1rem;
+}
+
+.swal-class {
+  width: 800px !important;
+  max-width: 90%;
+}
+
+.swal-view-class {
+  width: 500px !important;
+  max-width: 90%;
+}
+
+.view-form {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+}
+
+.view-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.field-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.view-info-container {
+  background-color: #ededed;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.current-info {
+  color: #333;
+}

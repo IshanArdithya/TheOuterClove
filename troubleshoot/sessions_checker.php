@@ -5,6 +5,8 @@ if (isset($_POST['destroy_session']) && isset($_POST['session_name'])) {
     $session_name = $_POST['session_name'];
     if (isset($_SESSION[$session_name])) {
         unset($_SESSION[$session_name]);
+        header("Location: sessions_checker.php");
+        exit();
     }
 }
 
@@ -13,14 +15,12 @@ echo "<ul>";
 foreach ($_SESSION as $key => $value) {
     echo "<li><strong>$key:</strong>";
     if (is_array($value)) {
-        // If the session value is an array, display each element separately
         echo "<ul>";
         foreach ($value as $subKey => $subValue) {
             echo "<li>$subKey: $subValue</li>";
         }
         echo "</ul>";
     } else {
-        // If the session value is not an array, display it as usual
         echo " $value</li>";
     }
 }

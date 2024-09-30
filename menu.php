@@ -1,7 +1,12 @@
 <?php
 include 'connectdb.php';
 
+session_start();
+
+$cartItems = [];
+
 $sql = "SELECT * FROM products";
+$result = $conn->query($sql);
 
 if (isset($_GET['search-submit'])) {
     $searchTerm = $_GET['search'];
@@ -9,28 +14,19 @@ if (isset($_GET['search-submit'])) {
     $sql = "SELECT * FROM products WHERE product_title LIKE '%$searchTerm%' OR product_description LIKE '%$searchTerm%'";
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
-    $product_id = intval($_POST['product_id']); // Get product ID from the form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_from_cart'])) {
+    $product_id = intval($_POST['product_id']);
 
-    // Initialize the cart session if it doesn't exist
-    if (!isset($_SESSION['Cart'])) {
-        $_SESSION['Cart'] = [];
-    }
-
-    // Check if the product is already in the cart
     if (isset($_SESSION['Cart'][$product_id])) {
-        // Increase the quantity if the product is already in the cart
-        $_SESSION['Cart'][$product_id] += 1;
-    } else {
-        // Add the product to the cart with quantity 1 if it's not already in the cart
-        $_SESSION['Cart'][$product_id] = 1;
+        $_SESSION['Cart'][$product_id] -= 1;
+
+        if ($_SESSION['Cart'][$product_id] <= 0) {
+            unset($_SESSION['Cart'][$product_id]);
+        }
+
+        $message = "Product removed from cart!";
     }
-
-    // Display a success message
-    $message = "Product added to cart!";
 }
-
-$result = $conn->query($sql);
 
 $conn->close();
 ?>
@@ -103,9 +99,9 @@ $conn->close();
                                 <p class="product-price">Rs.<?php echo $row['product_price']; ?></p>
 
                                 <!-- Add to Cart Form -->
-                                <form method="post" action="">
+                                <form id="add-to-cart-form-<?php echo $row['id']; ?>" class="add-to-cart-form" method="post">
                                     <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
-                                    <button type="submit" name="add_to_cart">Add to Cart</button>
+                                    <button class="product-btn" type="submit" name="add_to_cart">Add to Cart</button>
                                 </form>
                             </div>
                         </div>
@@ -126,92 +122,95 @@ $conn->close();
     include 'components/footer.php';
     ?>
 
-    <!-- Shopping Cart Section -->
-    <div id="shopping-cart" class="cart-container">
-        <div class="cart-header">
-            <h2>SHOPPING CART</h2>
-            <button id="close-cart-btn">&times;</button>
-        </div>
-        <div class="cart-content">
-            <div id="cart-items"></div>
-        </div>
-        <div class="cart-footer">
-            <div id="total-price">TOTAL: Rs. 0</div>
-            <button id="checkout-btn">Checkout</button>
-        </div>
-    </div>
-
     <script>
-        function addToCartClicked(event) {
-            var productContainer = event.target.closest('.product');
-            var productName = productContainer.querySelector('.product-title').innerText;
-            var productPrice = parseFloat(productContainer.querySelector('.product-price').innerText.replace('Rs.', ''));
+        document.addEventListener("DOMContentLoaded", function () {
+            const cartIcon = document.getElementById("shopping-icon");
+            const shoppingCart = document.getElementById("shopping-cart");
+            const closeCartBtn = document.getElementById("close-cart-btn");
+            const addToCartForms = document.querySelectorAll(".add-to-cart-form");
 
-            var cartItem = document.createElement('div');
-            cartItem.classList.add('cart-item');
-            cartItem.innerHTML = `
-            <img src="${productContainer.querySelector('img').src}" alt="${productName}">
-            <div>
-                <p>${productName}</p>
-                <p>Rs. ${productPrice.toFixed(2)}</p>
-            </div>
-        `;
+            addToCartForms.forEach(function (form) {
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault();
 
-            document.getElementById('cart-items').appendChild(cartItem);
+                    const formData = new FormData(this);
 
-            updateTotalPrice(productPrice);
-
-            document.getElementById('shopping-cart').style.display = 'block';
-        }
-        function updateTotalPrice(productPrice) {
-            var totalPriceElement = document.getElementById('total-price');
-            var currentTotal = parseFloat(totalPriceElement.innerText.replace('TOTAL: Rs. ', ''));
-            var newTotal = currentTotal + productPrice;
-            totalPriceElement.innerText = 'TOTAL: Rs. ' + newTotal.toFixed(2);
-        }
-
-        var addToCartButtons = document.querySelectorAll('.product-btn');
-        addToCartButtons.forEach(function (button) {
-            button.addEventListener('click', addToCartClicked);
-        });
-
-        function toggleShoppingCart() {
-            var shoppingCart = document.getElementById('shopping-cart');
-            shoppingCart.style.display = (shoppingCart.style.display === 'block') ? 'none' : 'block';
-        }
-
-        var shoppingIcon = document.getElementById('shopping-icon');
-        shoppingIcon.addEventListener('click', toggleShoppingCart);
-
-        var closeCartBtn = document.getElementById('close-cart-btn');
-        closeCartBtn.addEventListener('click', toggleShoppingCart);
-
-
-        function checkoutClicked() {
-            var selectedItems = [];
-            var cartItems = document.querySelectorAll('.cart-item');
-
-            cartItems.forEach(function (item) {
-                var productName = item.querySelector('p:first-child').innerText;
-                var productPrice = item.querySelector('p:last-child').innerText;
-
-                var product = {
-                    name: productName,
-                    price: productPrice
-                };
-
-                selectedItems.push(product);
+                    fetch('add_to_cart.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Product added to cart!");
+                                updateCartItems();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error adding to cart:', error);
+                        });
+                });
             });
 
-            var selectedItemsJSON = JSON.stringify(selectedItems);
+            function updateCartItems() {
+                fetch('fetch_cart.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        const cartItemsContainer = document.getElementById('cart-items');
+                        cartItemsContainer.innerHTML = '';
 
-            window.location.href = 'checkout.php?items=' + encodeURIComponent(selectedItemsJSON);
-        }
+                        if (data.length > 0) {
+                            data.forEach(item => {
+                                const cartItem = document.createElement('div');
+                                cartItem.classList.add('cart-item');
+                                cartItem.innerHTML = `
+                            <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                            <div class="cart-item-details">
+                                <h4>${item.name}</h4>
+                                <p><span class="product-price">${item.quantity}</span> × <span class="price-currency">LKR</span> <span class="product-price">${Number(item.price).toLocaleString('en', { minimumFractionDigits: 2 })}</span></p>
+                            </div>
+                            <form method="post" action="">
+                                <input type="hidden" name="product_id" value="${item.id}">
+                                <button type="submit" name="remove_from_cart" class="popup-cart-remove-btn">×</button>
+                            </form>
+                        `;
+                                cartItemsContainer.appendChild(cartItem);
+                            });
+                        } else {
+                            cartItemsContainer.innerHTML = '<p>Your cart is empty</p>';
+                        }
+                    })
+                    .catch(error => console.error('Error fetching cart items:', error));
+            }
 
-        var checkoutBtn = document.getElementById('checkout-btn');
-        checkoutBtn.addEventListener('click', checkoutClicked);
+            cartIcon.addEventListener("click", function (event) {
+                event.stopPropagation();
+                if (shoppingCart.style.display === "block") {
+                    shoppingCart.style.display = "none";
+                } else {
+                    updateCartItems();
+                    shoppingCart.style.display = "block";
+                }
+            });
+
+            if (closeCartBtn) {
+                closeCartBtn.addEventListener("click", function (event) {
+                    event.stopPropagation();
+                    shoppingCart.style.display = "none";
+                });
+            }
+
+            shoppingCart.addEventListener("click", function (event) {
+                event.stopPropagation();
+            });
+
+            window.addEventListener("click", function (event) {
+                if (shoppingCart.style.display === "block" && !shoppingCart.contains(event.target) && !cartIcon.contains(event.target)) {
+                    shoppingCart.style.display = "none";
+                }
+            });
+        });
     </script>
-
 
 </body>
 

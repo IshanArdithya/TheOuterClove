@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_email'] = $email;
 
             if ($email == 'admin@outerclove.com') {
-                header("Location: admindashboard.php");
+                header("Location: admin/reservations.php");
             } else if ($email == 'staff@outerclove.com') {
                 header("Location: staffdashboard.php");
             } else {

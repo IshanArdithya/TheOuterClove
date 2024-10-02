@@ -1,18 +1,18 @@
 /* Imported fonts from local files */
 @font-face {
   font-family: 'Bree Serif';
-  src: url(fonts/Bree_Serif/BreeSerif-Regular.ttf);
+  src: url(../fonts/Bree_Serif/BreeSerif-Regular.ttf);
 }
 
 @font-face {
   font-family: 'Open Sans';
-  src: url(fonts/Open_Sans/OpenSans-VariableFont_wdth\,wght.ttf);
+  src: url(../fonts/Open_Sans/OpenSans-VariableFont_wdth\,wght.ttf);
   font-weight: 300 800;
 }
 
 @font-face {
   font-family: 'Caveat';
-  src: url(fonts/Caveat/Caveat-VariableFont_wght.ttf);
+  src: url(../fonts/Caveat/Caveat-VariableFont_wght.ttf);
   font-weight: 400 700;
 }
 
@@ -156,7 +156,7 @@ transition: 0.3s;
 
 .bg-container {
   height: 100vh;
-  background-image: url('images/bg_1.jpg');
+  background-image: url('../images/bg_1.jpg');
 }
 
 .bg-container,
@@ -173,7 +173,7 @@ transition: 0.3s;
 
 .m-bg-container {
   height: 450px;
-  background-image: url('images/menu1.jpg');
+  background-image: url('../images/menu1.jpg');
   background-position: center 20%;
 }
 
@@ -707,20 +707,61 @@ a.bordered-btn:hover {
 
 /* ------------------- Featured Feedbacks ------------------- */
 
+.swiper-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  
+}
+
+#featuredfeedbacks {
+  overflow: hidden;
+}
+
+.swiper-slide {
+  display: flex;
+   justify-content: center;
+   opacity: 0;
+   transition: opacity 0.3s ease;
+}
+
+.swiper-slide-active {
+  opacity: 1;
+}
+
+.feedback-card {
+  text-align: center;
+  padding: 5vh;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.swiper-button-next, .swiper-button-prev {
+  color: #888;
+}
+
+.swiper-pagination-bullet {
+  background-color: #ddd;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #888;
+}
+
 .feedback-cards {
   display: flex;
   flex-direction: column;
   max-width: 900px;
   margin: 0 auto;
   position: relative;
-}
-
-.feedback-card {
-  display: none;
-  text-align: center;
-  padding: 5vh;
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 input[type="radio"] {
@@ -754,14 +795,6 @@ input[type="radio"]:checked + .feedback-navigation label {
 
 .feedback-navigation label:hover {
   background-color: rgb(144, 144, 144);
-}
-
-.feedback-image {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  margin-bottom: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .feedback-author {
@@ -1631,3 +1664,5 @@ input[type="radio"]:checked + .feedback-navigation label {
 }
 
 /* -------------- Cart -------------- */
+
+

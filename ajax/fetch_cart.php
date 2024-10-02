@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'connectdb.php';
+include '../connectdb.php';
 
 $cartItems = [];
 
@@ -27,6 +27,7 @@ if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
             }
         }
     }
-    echo json_encode($cartItems);
 }
+
+echo json_encode($cartItems);
 ?>

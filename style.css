@@ -1349,7 +1349,7 @@ input[type="radio"]:checked + .feedback-navigation label {
   text-align: center;
 }
 
-/* ------------ Shopping Cart ------------- */
+/* ------------ Popup Cart ------------- */
 
 .cart-container {
   display: none;
@@ -1509,6 +1509,19 @@ input[type="radio"]:checked + .feedback-navigation label {
   color: #DC3545;
 }
 
+.popup-cart-empty {
+  text-align: center !important;
+  font-size: 13.8px !important;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  background-color: #ccc;
+  color: #666;
+}
+
+
 
 /* -------------- Checkout -------------- */
 
@@ -1616,3 +1629,5 @@ input[type="radio"]:checked + .feedback-navigation label {
   color: #868e96;
   font-size: 0.9em;
 }
+
+/* -------------- Cart -------------- */

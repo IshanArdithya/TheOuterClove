@@ -31,27 +31,7 @@
                 </div> -->
                 <div class="cart-content">
                     <div id="cart-items">
-                        <?php if (!empty($cartItems)) { ?>
-                            <?php foreach ($cartItems as $item) { ?>
-                                <div class="cart-item">
-                                    <img src="<?php echo $item['image']; ?>" alt="<?php echo $item['name']; ?>"
-                                        class="cart-item-image">
-                                    <div class="cart-item-details">
-                                        <h4><?php echo $item['name']; ?></h4>
-                                        <p><span class="product-price"><?php echo $item['quantity']; ?></span> × <span
-                                                class="price-currency">LKR</span> <span
-                                                class="product-price"><?php echo number_format($item['price'], 2); ?></p>
-                                    </div>
-                                    <form class="remove-from-cart-form" method="post">
-                                        <input type="hidden" name="product_id" value="<?php echo $item['id']; ?>">
-                                        <button type="submit" name="remove_from_cart" class="popup-cart-remove-btn">×</button>
-                                    </form>
-
-                                </div>
-                            <?php } ?>
-                        <?php } else { ?>
-                            <p>Your cart is empty</p>
-                        <?php } ?>
+                        <!-- dynmaically showing here using js. (menu.php) -->
                     </div>
                 </div>
                 <div class="cart-footer">

@@ -1,5 +1,5 @@
 <?php
-session_start();
+include_once 'auth.php';
 include_once '../connectdb.php';
 ?>
 

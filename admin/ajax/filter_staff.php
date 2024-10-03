@@ -44,26 +44,34 @@ if ($result->num_rows > 0) {
 $output .= '</tbody></table>';
 echo $output;
 
-function roleDropdown($currentRole, $userId, $fullName) {
+function roleDropdown($currentRole, $userId, $fullName)
+{
     $roles = ['admin', 'manager', 'staff'];
-    $roleDropdown = '<select onchange="changeUserRole(this.value, ' . $userId . ', \'' . addslashes($fullName) . '\', this)" data-original-value="' . $currentRole . '">';
+    $roleDropdown = '<div class="dropdown-wrapper">';
+    $roleDropdown .= '<select class="staff-table" onchange="changeUserRole(this.value, ' . $userId . ', \'' . addslashes($fullName) . '\', this)" data-original-value="' . $currentRole . '">';
     foreach ($roles as $role) {
         $selected = ($role === $currentRole) ? 'selected' : '';
         $roleDropdown .= '<option value="' . $role . '" ' . $selected . '>' . ucfirst($role) . '</option>';
     }
-    $roleDropdown .= '</select>';
+    $roleDropdown .= "</select>";
+    $roleDropdown .= "<span class='dropdown-arrow'>&#9662;</span>";
+    $roleDropdown .= "</div>";
     return $roleDropdown;
 }
 
-function statusDropdown($currentStatus, $userId, $fullName) {
+function statusDropdown($currentStatus, $userId, $fullName)
+{
     $allstatus = ['active', 'inactive', 'suspended'];
-    $statusDropdown = '<select onchange="changeUserStatus(this.value, ' . $userId . ', \'' . addslashes($fullName) . '\', this)" data-original-value="' . $currentStatus . '">';
+    $statusDropdown = '<div class="dropdown-wrapper">';
+    $statusDropdown .= '<select class="staff-table" onchange="changeUserStatus(this.value, ' . $userId . ', \'' . addslashes($fullName) . '\', this)" data-original-value="' . $currentStatus . '">';
     foreach ($allstatus as $status) {
         $selected = ($status === $currentStatus) ? 'selected' : '';
         $statusDropdown .= '<option value="' . $status . '" ' . $selected . '>' . ucfirst($status) . '</option>';
     }
-    $statusDropdown .= '</select>';
+    $statusDropdown .= "</select>";
+    $statusDropdown .= "<span class='dropdown-arrow'>&#9662;</span>";
+    $statusDropdown .= "</div>";
     return $statusDropdown;
 }
-
 ?>
+

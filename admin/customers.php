@@ -1,5 +1,6 @@
 <?php
-session_start();
+include_once 'auth.php';
+
 include_once '../connectdb.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'deleteUser') {
@@ -104,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete user!',
                 cancelButtonText: 'No, go back!',
-                
+
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('', {
@@ -117,35 +118,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
                             'id': userID
                         })
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire(
-                                'Success!',
-                                'User account deleted!',
-                                'success'
-                            ).then(() => {
-                                location.reload();
-                            });
-                        } else {
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire(
+                                    'Success!',
+                                    'User account deleted!',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    'There was an error',
+                                    'error'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            }
+                        })
+                        .catch(error => {
                             Swal.fire(
                                 'Error!',
-                                'There was an error',
+                                'There was an error with the request.',
                                 'error'
                             ).then(() => {
                                 location.reload();
                             });
-                        }
-                    })
-                    .catch(error => {
-                        Swal.fire(
-                            'Error!',
-                            'There was an error with the request.',
-                            'error'
-                        ).then(() => {
-                            location.reload();
                         });
-                    });
                 }
             });
         }

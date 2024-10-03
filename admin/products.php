@@ -1,5 +1,5 @@
 <?php
-session_start();
+include_once 'auth.php';
 include_once '../connectdb.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'deleteProduct') {
@@ -89,7 +89,6 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Outer Clover Restaurant</title>
 
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-wvw1PZt5STwCrZ6xGq+GSE1a5/Sp5j+oN8t02kGGtWQdIzApkzt+ub7svD3Wt5z1hJS/VRuKhKoAO1t32k8sKw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
@@ -274,8 +273,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel!',
-                reverseButtons: true
+                cancelButtonText: 'No, cancel!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('', {
@@ -355,7 +353,6 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
                     const description = Swal.getPopup().querySelector('#description').value;
                     const price = Swal.getPopup().querySelector('#price').value;
 
-                    // Validate input before returning
                     if (!name || !description || !price) {
                         Swal.showValidationMessage('Please complete all fields');
                         return false;
@@ -371,11 +368,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Change',
-                cancelButtonText: 'Cancel',
-                reverseButtons: true
+                cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Use result.value to get the input values
                     const { name, description, price } = result.value;
                     window.location.href = "<?= $_SERVER['PHP_SELF'] ?>?action=updateProduct&id=" + encodeURIComponent(productId) +
                         "&name=" + encodeURIComponent(name) +

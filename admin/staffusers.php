@@ -1,13 +1,13 @@
 <?php
-session_start();
+include_once 'auth.php';
 include_once '../connectdb.php';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'deleteUser') {
-    $userID = intval($_POST['id']);
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'deleteStaff') {
+    $userId = intval($_POST['id']);
 
-    $sql = "DELETE FROM users WHERE id = ?";
+    $sql = "DELETE FROM staff_users WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $userID);
+    $stmt->bind_param("i", $userId);
     if ($stmt->execute()) {
         echo json_encode(['success' => true]);
     } else {
@@ -75,23 +75,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
             ?>
 
             <div class="recents" id="staffTableContainer">
-                <h2>View <?php echo $roleName; ?></h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="staffTableBody">
-                        <!-- filter_staff.php -->
-                    </tbody>
-                </table>
+                <div class="staff-table">
+                    <h2>View <?php echo $roleName; ?></h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staffTableBody">
+                            <!-- filter_staff.php -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </main>
@@ -99,62 +101,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
 
         </div>
     </div>
-
-    <script>
-        function deleteUser(userID, userName) {
-            Swal.fire({
-                title: 'Delete User?',
-                text: `Do you really want to delete User: "${userName}"?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete user!',
-                cancelButtonText: 'No, go back!',
-
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch('', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: new URLSearchParams({
-                            'action': 'deleteUser',
-                            'id': userID
-                        })
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                Swal.fire(
-                                    'Success!',
-                                    'User account deleted!',
-                                    'success'
-                                ).then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire(
-                                    'Error!',
-                                    'There was an error',
-                                    'error'
-                                ).then(() => {
-                                    location.reload();
-                                });
-                            }
-                        })
-                        .catch(error => {
-                            Swal.fire(
-                                'Error!',
-                                'There was an error with the request.',
-                                'error'
-                            ).then(() => {
-                                location.reload();
-                            });
-                        });
-                }
-            });
-        }
-    </script>
 
     <script>
         function filterTable(role = 'all', element) {
@@ -261,6 +207,83 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
                 }
             });
         }
+
+        function deleteStaff(userId, full_name, role) {
+            const capitalRole = role.charAt(0).toUpperCase() + role.slice(1);
+
+            Swal.fire({
+                title: 'Delete User?',
+                text: `Do you really want to delete User: "${full_name} [${capitalRole}]"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete user!',
+                cancelButtonText: 'No, go back!',
+                didOpen: () => {
+                    const confirmButton = Swal.getConfirmButton();
+                    let countdown = 3;
+                    confirmButton.disabled = true;
+                    confirmButton.textContent = `Yes, delete user! (${countdown})`;
+
+                    const interval = setInterval(() => {
+                        countdown--;
+                        confirmButton.textContent = `Yes, delete user! (${countdown})`;
+
+                        if (countdown === 0) {
+                            clearInterval(interval);
+                            confirmButton.textContent = 'Yes, delete user!';
+                            confirmButton.disabled = false;
+                        }
+                    }, 1000);
+                }
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                            'action': 'deleteStaff',
+                            'id': userId
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire(
+                                    'Success!',
+                                    'User account deleted!',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    'There was an error',
+                                    'error'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire(
+                                'Error!',
+                                'There was an error with the request.',
+                                'error'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        });
+                }
+            });
+        }
+
+    </script>
+
+    <script>
 
     </script>
 

@@ -506,3 +506,52 @@ main .recents table tbody tr:last-child td {
 .filter-label:hover {
   background-color: #0056b3;
 }
+
+/* Dropdown */
+
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 45%;
+}
+
+.staff-table {
+  width: 100%;
+  padding: 8px 30px 8px 8px;
+  border: 1px solid var(--color-light);
+  border-radius: var(--border-radius-1);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.88rem;
+  appearance: none;
+  background-color: var(--color-white);
+  color: var(--color-dark);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.staff-table option {
+  background-color: var(--color-white);
+  color: var(--color-dark);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.88rem;
+}
+
+.dropdown-arrow {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 12px;
+  color: var(--color-dark-variant);
+}
+
+.staff-table:hover {
+  border-color: var(--main-theme-color);
+  box-shadow: 0 0 5px var(--main-theme-color);
+}
+
+.staff-table:focus {
+  outline: none;
+  border-color: var(--main-theme-color);
+  box-shadow: 0 0 7px var(--main-theme-color);
+}

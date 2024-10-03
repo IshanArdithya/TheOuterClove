@@ -8,7 +8,7 @@
         <a href="products.php">Products</a>
         <a href="inquiries.php">Inquiries</a>
         <a href="feedbacks.php">Feedbacks</a>
-        <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] === 'admin' || $_SESSION['user']['role'] === 'manager')): ?>
+        <?php if (isset($_SESSION['staff']) && ($_SESSION['staff']['role'] === 'admin' || $_SESSION['staff']['role'] === 'manager')): ?>
             <a href="customers.php">Customers</a>
             <a href="staffusers.php">Staff Users</a>
         <?php endif; ?>

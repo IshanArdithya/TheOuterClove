@@ -16,13 +16,11 @@
   font-weight: 400 700;
 }
 
-
-
 :root {
   --color-primary: #2095ae;
   --color-danger: #2b5de5;
-  --color-success: #1B9C85;
-  --color-warning: #F7D060;
+  --color-success: #1b9c85;
+  --color-warning: #f7d060;
   --color-white: #fff;
   --color-info-dark: #7d8da1;
   --color-dark: #363949;
@@ -65,7 +63,7 @@ html {
 body {
   width: 100vw;
   height: 100vh;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 0.88rem;
   user-select: none;
   overflow-x: hidden;
@@ -123,8 +121,6 @@ b {
 .warning {
   color: var(--color-warning);
 }
-
-
 
 .container {
   display: grid;
@@ -269,7 +265,6 @@ main .recents table tbody tr:last-child td {
   border: none;
 }
 
-
 /* Buttons */
 
 .btn-primary {
@@ -310,7 +305,6 @@ main .recents table tbody tr:last-child td {
   cursor: pointer;
   transition: 0.3s;
 }
-
 
 .btn-danger:hover {
   background-color: #ec5d5d;
@@ -470,11 +464,45 @@ main .recents table tbody tr:last-child td {
 
 .view-info-container {
   background-color: #ededed;
-    padding: 10px;
-    border-radius: 5px;
-    width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
 }
 
 .current-info {
   color: #333;
+}
+
+.staff-filter {
+  margin-bottom: 50px;
+}
+
+.staff-filter-label {
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  transition: background-color 0.3s ease;
+}
+
+.staff-filter h3 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 13px;
+}
+
+.staff-filter-label.active {
+  opacity: 1;
+}
+
+.filter-active {
+  opacity: 1;
+}
+
+.filter-label:hover {
+  background-color: #0056b3;
 }

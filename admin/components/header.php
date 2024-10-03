@@ -8,6 +8,10 @@
         <a href="products.php">Products</a>
         <a href="inquiries.php">Inquiries</a>
         <a href="feedbacks.php">Feedbacks</a>
+        <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] === 'admin' || $_SESSION['user']['role'] === 'manager')): ?>
+            <a href="customers.php">Customers</a>
+            <a href="staffusers.php">Staff Users</a>
+        <?php endif; ?>
     </nav>
 
     <div class="icons">

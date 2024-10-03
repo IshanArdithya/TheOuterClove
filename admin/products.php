@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once '../connectdb.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'deleteProduct') {
@@ -39,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
         $updated_price = trim($_GET['price']);
         $updated_description = trim($_GET['description']);
 
-        // Using prepared statements to prevent SQL injection
         $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
         $stmt->bind_param('i', $product_id);
         $stmt->execute();

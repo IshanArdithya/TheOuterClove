@@ -1995,3 +1995,18 @@ input[type="radio"]:checked + .feedback-navigation label {
   opacity: 0;
   transform: translateY(-20px) scale(0.9);
 }
+
+.tax-info {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  cursor: pointer;
+  vertical-align: middle;
+  
+}
+
+.tax-info svg {
+  vertical-align: middle;
+  margin-left: 2px;
+  margin: 0;
+}

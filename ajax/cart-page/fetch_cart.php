@@ -2,6 +2,13 @@
 session_start();
 include '../../connectdb.php';
 
+$total_price = 0;
+$item_count = 0;
+$tax_rate_percentage = 3.4;
+$tax_rate = $tax_rate_percentage / 100;
+$final_total = 0;
+$tax = 0;
+
 if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
     $cart_items = $_SESSION['Cart'];
     $product_ids = array_keys($cart_items);
@@ -11,9 +18,8 @@ if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
     $result = $conn->query($query);
 
     if ($result->num_rows > 0) {
-        // Initialize a variable to hold the cart items HTML
         $cartHtml = '';
-        
+
         while ($row = $result->fetch_assoc()) {
             $product_id = $row['id'];
             $product_title = $row['product_title'];
@@ -22,7 +28,9 @@ if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
             $product_price = $row['product_price'];
             $quantity = $cart_items[$product_id];
 
-            // Append each item to the cart HTML
+            $item_count += $quantity;
+            $total_price += $product_price * $quantity;
+
             $cartHtml .= '<div class="cart-page-item" data-product-id="' . $product_id . '">
                 <div class="cart-page-item-image">
                     <img src="' . $image_path . '" alt="' . $product_title . '">
@@ -61,8 +69,18 @@ if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
             </div>';
         }
 
-        // Return the cart items HTML
-        echo json_encode(['success' => true, 'cartHtml' => $cartHtml]);
+        $tax = $total_price * $tax_rate;
+        $final_total = $total_price + $tax;
+
+        echo json_encode([
+            'success' => true,
+            'cartHtml' => $cartHtml,
+            'itemCount' => $item_count,
+            'totalPrice' => number_format($total_price, 2),
+            'tax' => number_format($tax, 2),
+            'taxRate' => $tax_rate_percentage . '%',
+            'finalTotal' => number_format($final_total, 2)
+        ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'No products found in cart.']);
     }

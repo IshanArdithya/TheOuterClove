@@ -4,17 +4,12 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     $product_id = intval($_POST['product_id']);
 
-    if (!isset($_SESSION['Cart'])) {
-        $_SESSION['Cart'] = [];
-    }
-
     if (isset($_SESSION['Cart'][$product_id])) {
-        $_SESSION['Cart'][$product_id] += 1;
+        unset($_SESSION['Cart'][$product_id]);
+        echo json_encode(['success' => true]);
     } else {
-        $_SESSION['Cart'][$product_id] = 1;
+        echo json_encode(['success' => false, 'message' => 'Item not found in cart.']);
     }
-
-    echo json_encode(['success' => true]);
     exit;
 }
 ?>

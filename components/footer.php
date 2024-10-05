@@ -40,7 +40,7 @@
         
     
         <div class="footer-bottom">
-            <p>Copyrights &copy; 2023 - <a href="https://github.com/IshanArdithya"><span class="theme-accent-color">Ishan Ardithya</span></a>, All Rights Reserved.</p>
+            <p>Copyrights &copy; 2024 - <a href="https://github.com/IshanArdithya"><span class="theme-accent-color">Ishan Ardithya</span></a>, All Rights Reserved.</p>
         </div>
 
         <script>

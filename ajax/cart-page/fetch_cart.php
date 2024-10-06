@@ -8,6 +8,7 @@ $tax_rate_percentage = 3.4;
 $tax_rate = $tax_rate_percentage / 100;
 $final_total = 0;
 $tax = 0;
+$delivery_fee = 10.00;
 
 if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
     $cart_items = $_SESSION['Cart'];
@@ -69,17 +70,20 @@ if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
             </div>';
         }
 
-        $tax = $total_price * $tax_rate;
-        $final_total = $total_price + $tax;
+        $tax = $total_price * $tax_rate; // tax not include delivery
+        $final_total_pickup = $total_price + $tax; // without delivery fee
+        $final_total_delivery = $total_price + $tax + $delivery_fee;
 
         echo json_encode([
             'success' => true,
             'cartHtml' => $cartHtml,
             'itemCount' => $item_count,
             'totalPrice' => number_format($total_price, 2),
+            'deliveryFee' => number_format($delivery_fee, 2),
             'tax' => number_format($tax, 2),
             'taxRate' => $tax_rate_percentage . '%',
-            'finalTotal' => number_format($final_total, 2)
+            'finalTotalPickup' => number_format($final_total_pickup, 2),
+            'finalTotalDelivery' => number_format($final_total_delivery, 2)
         ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'No products found in cart.']);

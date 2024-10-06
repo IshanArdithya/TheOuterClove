@@ -40,7 +40,7 @@ session_start();
             <div class="m-menu-text">
                 <h1>CART</h1>
                 <div class="breadcrumb">
-                    <a href="index.php">Home &gt;</a> &nbsp;&nbsp; <a href="cart.php">Menu &gt;</a>
+                    <a href="index.php">Home &gt;</a> &nbsp;&nbsp; <a href="cart.php">Cart &gt;</a>
                 </div>
             </div>
         </div>
@@ -74,13 +74,41 @@ session_start();
                             <span><span class="cart-page-item-count">0</span> items</span>
                             <span>$<span class="cart-page-total-price">0.00</span></span>
                         </p>
-                        <p class="cart-page-row-spacebetween"><span>Delivery</span>
-                            <span>Free</span>
+                        <p class="cart-page-row-spacebetween"><span>Shipping</span>
                         </p>
+
+                        <div class="cart-page-delivery-options">
+                            <p class="cart-page-row-spacebetween">
+                                <label>
+                                    <input type="radio" name="deliveryOption" value="delivery" checked>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960"
+                                        width="20px" fill="#000000">
+                                        <path
+                                            d="M224.12-161q-49.12 0-83.62-34.42Q106-229.83 106-279H40v-461q0-24 18-42t42-18h579v167h105l136 181v173h-71q0 49.17-34.38 83.58Q780.24-161 731.12-161t-83.62-34.42Q613-229.83 613-279H342q0 49-34.38 83.5t-83.5 34.5Zm-.12-60q24 0 41-17t17-41q0-24-17-41t-41-17q-24 0-41 17t-17 41q0 24 17 41t41 17Zm507 0q24 0 41-17t17-41q0-24-17-41t-41-17q-24 0-41 17t-17 41q0 24 17 41t41 17Zm-52-204h186L754-573h-75v148Z" />
+                                    </svg>
+                                    Delivery
+                                </label>
+                                <span>$<span class="cart-page-delivery-fee">0.00</span></span>
+                            </p>
+                            <p class="cart-page-row-spacebetween">
+                                <label>
+                                    <input type="radio" name="deliveryOption" value="pickup">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960"
+                                        width="20px" fill="#000000">
+                                        <path
+                                            d="M165-733v-60h632v60H165Zm5 567v-245h-49v-60l44-202h631l44 202v60h-49v245h-60v-245H552v245H170Zm60-60h262v-185H230v185Z" />
+                                    </svg>
+                                    Pickup
+                                </label>
+                                <span>Free</span>
+                            </p>
+                        </div>
+
+
                         <p class="cart-page-row-spacebetween">
                             <span>Tax
                                 <!-- contents in tippy.js script. tax-info -->
-                                <span class="tax-info" data-tippy-content=""> 
+                                <span class="tax-info" data-tippy-content="">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960"
                                         width="15px" fill="#000000">
                                         <path
@@ -109,8 +137,12 @@ session_start();
                 </div>
             </div>
             <div class="cart-page-empty">
-                <h1>Cart is empty</h1>
-
+                <h1>Your Cart is empty</h1>
+                <p>Your cart is waiting! Add something delicious and we’ll bring it right to you.</p>
+                <div class="cart-page-empty-btn" onclick="location.href='menu.php';">
+                    <button>Get Started</button>
+                    <span class="cart-page-empty-btn-arrow">→</span>
+                </div>
             </div>
         </div>
     </div>
@@ -131,23 +163,40 @@ session_start();
                             $('#cart-page-items-list').html(data.cartHtml);
                             $('.cart-page-item-count').text(data.itemCount);
                             $('.cart-page-total-price').text(data.totalPrice);
+                            $('.cart-page-delivery-fee').text(data.deliveryFee);
                             $('.cart-page-tax').text(data.tax);
-                            $('.cart-page-final-total').text(data.finalTotal);
+                            $('.cart-page-final-total').text(data.finalTotalDelivery);
+
+                            // based on default checked option
+                            if ($('input[name="deliveryOption"]:checked').val() === 'delivery') {
+                                $('.cart-page-final-total').text(data.finalTotalDelivery);
+                            } else {
+                                $('.cart-page-final-total').text(data.finalTotalPickup);
+                            }
 
                             // tipppy.js - tax-info
                             tippy('.tax-info', {
-                            content: `
+                                content: `
                                 <div>
                                     <strong>Tax Rate?</strong><br>
                                     <span class="tax-rate">${data.taxRate}</span><br>
                                     This is the tax amount based on the current tax rates.
                                 </div>
                             `,
-                            allowHTML: true,
-                            interactive: true,
-                            theme: 'light',
-                        });
-        
+                                allowHTML: true,
+                                interactive: true,
+                                theme: 'light',
+                            });
+
+                            // final total changes when shipping option changes
+                            $('input[name="deliveryOption"]').change(function () {
+                                if ($(this).val() === 'delivery') {
+                                    $('.cart-page-final-total').text(data.finalTotalDelivery);
+                                } else {
+                                    $('.cart-page-final-total').text(data.finalTotalPickup);
+                                }
+                            });
+
                         } else {
                             $('#cart-page-items-list').html('');
                             $('.item-count span').text('0');

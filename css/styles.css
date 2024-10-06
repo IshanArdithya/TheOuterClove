@@ -193,6 +193,10 @@ transition: 0.3s;
   text-transform: uppercase;
 }
 
+.m-menu-text h1 {
+  text-align: center;
+}
+
 .breadcrumb {
   font-size: 12px;
   color: #ffffffbf;
@@ -1956,12 +1960,12 @@ input[type="radio"]:checked + .feedback-navigation label {
 }
 
 .cart-page-order-summary p {
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   font-size: 15px;
   color: #000;
 }
 
-.cart-page-order-summary p:last-child {
+.cart-page-order-summary > p:last-of-type {
   margin-top: 20px;
 }
 
@@ -2009,4 +2013,82 @@ input[type="radio"]:checked + .feedback-navigation label {
   vertical-align: middle;
   margin-left: 2px;
   margin: 0;
+}
+
+.cart-page-delivery-options {
+  padding-left: 15px;
+  margin-top: 8px;
+}
+
+.cart-page-delivery-options label {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.cart-page input[type="radio"] {
+  display: inline-block;
+}
+
+.cart-page-delivery-options svg {
+  vertical-align: middle;
+}
+
+.cart-page-empty {
+  font-family: "Bree Serif", serif;
+  margin-bottom: 50px;
+}
+
+.cart-page-empty h1 {
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+.cart-page-empty-btn {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  background-color: black;
+  width: 200px;
+  padding: 15px 50px 15px 20px;
+  border: 2px solid black;
+  transition: all 0.3s ease;
+  text-align: left;
+  margin-top: 40px;
+}
+
+.cart-page-empty-btn button {
+  font-size: 0.9rem;
+  font-family: "Bree Serif", serif;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.cart-page-empty-btn .cart-page-empty-btn-arrow {
+  font-size: 1.2rem;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+
+.cart-page-empty-btn:hover {
+  background-color: white;
+}
+
+.cart-page-empty-btn:hover button {
+  color: black;
+}
+
+.cart-page-empty-btn:hover .cart-page-empty-btn-arrow {
+  color: black;
+  right: 25px;
 }

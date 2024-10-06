@@ -63,7 +63,7 @@ session_start();
                     </div>
                 </div>
                 <div class="cart-page-right">
-                    <div class="cart-page-checkout-btn" onclick="location.href='checkout_page.php';">
+                    <div class="cart-page-checkout-btn" onclick="location.href='checkout.php';">
                         <button>Checkout</button>
                         <span class="checkout-arrow">→</span>
                     </div>
@@ -275,6 +275,64 @@ session_start();
                     }
                 });
             });
+
+            $(document).on('change', '.cart-page-item-quantity', function () {
+                var productId = $(this).data('product-id');
+                var quantity = $(this).val();
+
+                $.ajax({
+                    url: 'ajax/cart-page/update_quantity.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        product_id: productId,
+                        quantity: quantity
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            refetchCart();
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 1500,
+                                timerProgressBar: true
+                            });
+                            Toast.fire({
+                                icon: "success",
+                                title: "Products Updated!"
+                            });
+                        } else {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 1500,
+                                timerProgressBar: true
+                            });
+                            Toast.fire({
+                                icon: "error",
+                                title: data.message
+                            });
+                        }
+                    },
+                    error: function () {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true
+                        });
+                        Toast.fire({
+                            icon: "error",
+                            title: "Could not update the quantity. Please try again."
+                        });
+                    }
+                });
+            });
+
+
         });
 
     </script>

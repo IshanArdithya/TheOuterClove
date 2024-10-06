@@ -272,7 +272,7 @@ a.bordered-btn:hover {
   color: var(--main-theme-color) !important;
 }
 
-/* Using this as a overlay over the images ( to make images darker ) */
+/* using this as a overlay over the images ( to make images darker ) */
 .low-dark {
   content: '';
   position: absolute;
@@ -2031,6 +2031,8 @@ input[type="radio"]:checked + .feedback-navigation label {
 
 .cart-page-delivery-options svg {
   vertical-align: middle;
+  fill: var(--main-theme-color);
+  margin: 0 2px;
 }
 
 .cart-page-empty {

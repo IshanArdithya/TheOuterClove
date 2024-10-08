@@ -49,7 +49,7 @@ session_start();
     <!-- -------------- Menu Cards -------------- -->
 
     <div id="menu" class="main-color1">
-        <div class="cart-page-container">
+        <div class="container2">
             <div class="cart-page">
                 <div class="cart-page-left">
                     <div class="cart-page-header">

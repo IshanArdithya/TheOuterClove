@@ -230,10 +230,10 @@
 
                             <div class="checkout-page-section-divider"></div>
 
-                            <!-- Delivery Option Selected -->
-                            <div id="delivery-selected" style="display:none;">
+
+                            <div id="select-pickup-option">
                                 <div class="checkout-page-shipping-option-section">
-                                    <h3>Delivery Options</h3>
+                                    <h3 id="select-pickup-option-h3">Order For?</h3>
                                     <div class="checkout-page-shipping-option-container">
                                         <div class="checkout-page-shipping-option-icon">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="21px"
@@ -244,10 +244,12 @@
                                         </div>
                                         <div class="checkout-page-shipping-option-text">
                                             <p>Now</p>
-                                            <p>Deliver in 30-40 min</p>
+                                            <p id="select-pickup-option-p">Order will be ready within 15 min but for
+                                                delivery it takes 30-40 min</p>
                                         </div>
                                     </div>
-                                    <div class="checkout-page-shipping-option-container">
+                                    <div class="checkout-page-shipping-option-container"
+                                        onclick="showSchedulePopup('schedule-option-text')">
                                         <div class="checkout-page-shipping-option-icon">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="20px"
                                                 viewBox="0 -960 960 960" width="20px" fill="#000000">
@@ -255,7 +257,7 @@
                                                     d="M444-384v-72h72v72h-72Zm-156 0v-72h72v72h-72Zm312 0v-72h72v72h-72ZM444-240v-72h72v72h-72Zm-156 0v-72h72v72h-72Zm312 0v-72h72v72h-72ZM144-96v-672h144v-96h72v96h240v-96h72v96h144v672H144Zm72-72h528v-360H216v360Zm0-432h528v-96H216v96Zm0 0v-96 96Z" />
                                             </svg>
                                         </div>
-                                        <div class="checkout-page-shipping-option-text">
+                                        <div class="checkout-page-shipping-option-text" id="schedule-option-text">
                                             <p>Schedule</p>
                                             <p>Choose a date & time</p>
                                         </div>
@@ -263,38 +265,6 @@
                                 </div>
                             </div>
 
-                            <!-- Pickup Option Selected -->
-                            <div id="pickup-selected" style="display:none;">
-                                <div class="checkout-page-shipping-option-section">
-                                    <h3>Pickup Options</h3>
-                                    <div class="checkout-page-shipping-option-container">
-                                        <div class="checkout-page-shipping-option-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="21px"
-                                                viewBox="0 -960 960 960" width="21px" fill="#000000">
-                                                <path
-                                                    d="M48-192v-72h240v-72H96v-72h192v-72H144v-72h144v-120l-76-161 65-31 91 192h416l-76-161 66-31 90 192v480H48Zm468-264h120q15.3 0 25.65-10.29Q672-476.58 672-491.79t-10.35-25.71Q651.3-528 636-528H516q-15.3 0-25.65 10.29Q480-507.42 480-492.21t10.35 25.71Q500.7-456 516-456ZM360-264h432v-336H360v336Zm0 0v-336 336Z" />
-                                            </svg>
-                                        </div>
-                                        <div class="checkout-page-shipping-option-text">
-                                            <p>Now</p>
-                                            <p>Order will be ready in 15 min</p>
-                                        </div>
-                                    </div>
-                                    <div class="checkout-page-shipping-option-container">
-                                        <div class="checkout-page-shipping-option-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px"
-                                                viewBox="0 -960 960 960" width="20px" fill="#000000">
-                                                <path
-                                                    d="M444-384v-72h72v72h-72Zm-156 0v-72h72v72h-72Zm312 0v-72h72v72h-72ZM444-240v-72h72v72h-72Zm-156 0v-72h72v72h-72Zm312 0v-72h72v72h-72ZM144-96v-672h144v-96h72v96h240v-96h72v96h144v672H144Zm72-72h528v-360H216v360Zm0-432h528v-96H216v96Zm0 0v-96 96Z" />
-                                            </svg>
-                                        </div>
-                                        <div class="checkout-page-shipping-option-text">
-                                            <p>Schedule</p>
-                                            <p>Choose a date & time</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="checkout-page-section-divider"></div>
                             <div class="checkout-page-payment">
@@ -410,6 +380,8 @@
             let deliveryTotal, pickupTotal;
             $(document).ready(function () {
 
+                // disabled 'Now' & 'Schedule' until user chose either 'Delivery' or 'Pickup'
+                $('.checkout-page-shipping-option-container:contains("Now"), .checkout-page-shipping-option-container:contains("Schedule")').addClass('disabled-container').css('pointer-events', 'none');
 
                 function refetchCart() {
                     $.ajax({
@@ -564,31 +536,65 @@
                     }
                 });
 
-
-
+                // delivery/pickup select
                 window.selectOption = function (option) {
-                    // Hide both sections initially
                     $('#delivery-selected').hide();
                     $('#pickup-selected').hide();
 
-                    // Show the selected section and update the total
                     if (option === 'delivery') {
-                        $('#delivery-selected').show();
-                        $('.cart-page-final-total').text(deliveryTotal); // Update final total for delivery
+                        $('.cart-page-final-total').text(deliveryTotal);
                         $('.delivery-option').addClass('selected');
                         $('.pickup-option').removeClass('selected');
+
+                        $('#select-pickup-option-p').text('Deliver in 30-40 min');
+
+                        $('.checkout-page-shipping-option-container:contains("Now"), .checkout-page-shipping-option-container:contains("Schedule")').removeClass('disabled-container').css('pointer-events', 'auto');
+
                     } else if (option === 'pickup') {
-                        $('#pickup-selected').show();
-                        $('.cart-page-final-total').text(pickupTotal); // Update final total for pickup
+                        $('.cart-page-final-total').text(pickupTotal);
                         $('.pickup-option').addClass('selected');
                         $('.delivery-option').removeClass('selected');
+
+                        $('#select-pickup-option-p').text('Order will be ready in 15 min');
+
+                        $('.checkout-page-shipping-option-container:contains("Now"), .checkout-page-shipping-option-container:contains("Schedule")').removeClass('disabled-container').css('pointer-events', 'auto');
                     }
                 };
 
+                // select schedule & update date,time text
+                window.updateScheduleOption = function (day, time) {
+                    const formattedDay = new Date(day).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    const scheduleText = `${formattedDay} ${time}`;
+
+                    $('.checkout-page-shipping-option-container .checkout-page-shipping-option-text p')
+                        .filter(function () {
+                            return $(this).text() === 'Choose a date & time';
+                        })
+                        .text(scheduleText);
+
+                    $('.checkout-page-shipping-option-container').removeClass('selected');
+                    $('.checkout-page-shipping-option-container:contains("Schedule")').addClass('selected');
+                };
+
+                // select "Now"
+                window.selectNowOption = function () {
+                    $('.checkout-page-shipping-option-container').removeClass('selected');
+                    $('.checkout-page-shipping-option-container:contains("Now")').addClass('selected');
+                };
+
+                $('.checkout-page-shipping-option-container:contains("Now")').on('click', function () {
+                    window.selectNowOption();
+                });
 
             });
 
         </script>
+
+        <script src="js/checkout-page/schedule-popup.js" defer></script>
+
 
     </body>
 

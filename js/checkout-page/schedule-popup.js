@@ -104,9 +104,14 @@ function selectDay(dayISO, element, todayISO) {
             timeOptionsContainer.innerHTML += `
             <div class="time-option">
                 <label>
-                    <input type="radio" name="time" value="${time}"> ${time}
+                    <input type="radio" name="time" value="${time}" onclick="selectTime(this)"> ${time}
                 </label>
             </div>`;
         }
     }
+}
+
+function selectTime(element) {
+    document.querySelectorAll('.time-option').forEach(el => el.classList.remove('selected'));
+    element.parentElement.parentElement.classList.add('selected');
 }

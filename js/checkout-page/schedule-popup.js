@@ -103,7 +103,7 @@ function selectDay(dayISO, element, todayISO) {
             let time = new Date(0, 0, 0, hour, minutes).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             timeOptionsContainer.innerHTML += `
             <div class="time-option">
-                <label>
+                <label class="time-option-label">
                     <input type="radio" name="time" value="${time}" onclick="selectTime(this)"> ${time}
                 </label>
             </div>`;
@@ -112,6 +112,6 @@ function selectDay(dayISO, element, todayISO) {
 }
 
 function selectTime(element) {
-    document.querySelectorAll('.time-option').forEach(el => el.classList.remove('selected'));
-    element.parentElement.parentElement.classList.add('selected');
+    document.querySelectorAll('.time-option-label').forEach(el => el.classList.remove('selected'));
+    element.parentElement.classList.add('selected');
 }

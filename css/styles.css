@@ -2669,3 +2669,12 @@ input[type="radio"]:checked + .feedback-navigation label {
   color: white;
   border-color: #4CAF50;
 }
+
+.disabled-btn {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+#placeOrderButton:disabled {
+  cursor: not-allowed;
+}

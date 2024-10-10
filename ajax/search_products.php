@@ -19,8 +19,8 @@ if ($result->num_rows > 0) {
                 <h4 class="product-title"><?php echo $row['product_title']; ?></h4>
                 <p class="product-description"><?php echo $row['product_description']; ?></p>
                 <p class="product-price">Rs.<?php echo $row['product_price']; ?></p>
-                <form id="add-to-cart-form-<?php echo $row['id']; ?>" class="add-to-cart-form" method="post">
-                    <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                <form id="add-to-cart-form-<?php echo $row['product_id']; ?>" class="add-to-cart-form" method="post">
+                    <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
                     <button class="product-btn" type="submit" name="add_to_cart">Add to Cart</button>
                 </form>
             </div>

@@ -15,14 +15,14 @@ if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
     $product_ids = array_keys($cart_items);
     $product_ids_str = implode(',', $product_ids);
 
-    $query = "SELECT id, product_title, product_description, image_path, product_price FROM products WHERE id IN ($product_ids_str)";
+    $query = "SELECT product_id, product_title, product_description, image_path, product_price FROM products WHERE product_id IN ($product_ids_str)";
     $result = $conn->query($query);
 
     if ($result->num_rows > 0) {
         $cartHtml = '';
 
         while ($row = $result->fetch_assoc()) {
-            $product_id = $row['id'];
+            $product_id = $row['product_id'];
             $product_title = $row['product_title'];
             $product_description = $row['product_description'];
             $image_path = $row['image_path'];

@@ -9,12 +9,12 @@ if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
 
     if (!empty($productIds)) {
         $ids = implode(',', $productIds);
-        $sql = "SELECT id, product_title, product_price, image_path FROM products WHERE id IN ($ids)";
+        $sql = "SELECT product_id, product_title, product_price, image_path FROM products WHERE product_id IN ($ids)";
         $cartResult = $conn->query($sql);
 
         if ($cartResult->num_rows > 0) {
             while ($row = $cartResult->fetch_assoc()) {
-                $productId = $row['id'];
+                $productId = $row['product_id'];
                 $quantity = $_SESSION['Cart'][$productId];
 
                 $cartItems[] = [

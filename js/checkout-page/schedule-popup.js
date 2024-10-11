@@ -114,4 +114,13 @@ function selectDay(dayISO, element, todayISO) {
 function selectTime(element) {
     document.querySelectorAll('.time-option-label').forEach(el => el.classList.remove('selected'));
     element.parentElement.classList.add('selected');
+
+    const timeString = element.value;
+    const [hours, minutes] = timeString.split(':');
+    
+    const hours24 = String(hours).padStart(2, '0');
+    const minutes24 = String(minutes).padStart(2, '0');
+
+    const formattedTime = `${hours24}:${minutes24}`;
+    element.value = formattedTime;
 }

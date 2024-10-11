@@ -3,6 +3,94 @@ include 'connectdb.php';
 session_start();
 ?>
 
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $billing_first_name = htmlspecialchars(trim($_POST['billing_first_name']));
+    $billing_last_name = htmlspecialchars(trim($_POST['billing_last_name']));
+    $billing_address_1 = htmlspecialchars(trim($_POST['billing_address_1']));
+    $billing_address_2 = htmlspecialchars(trim($_POST['billing_address_2']));
+    $billing_city = htmlspecialchars(trim($_POST['billing_city']));
+    $billing_phone_number = htmlspecialchars(trim($_POST['billing_phone_number']));
+    $billing_email = htmlspecialchars(trim($_POST['billing_email']));
+
+    $isSameAsBilling = isset($_POST['deliverySender']);
+
+    if (!$isSameAsBilling) {
+        $delivery_first_name = htmlspecialchars(trim($_POST['delivery_first_name']));
+        $delivery_last_name = htmlspecialchars(trim($_POST['delivery_last_name']));
+        $delivery_address_1 = htmlspecialchars(trim($_POST['delivery_address_1']));
+        $delivery_address_2 = htmlspecialchars(trim($_POST['delivery_address_2']));
+        $delivery_city = htmlspecialchars(trim($_POST['delivery_city']));
+        $delivery_phone_number = htmlspecialchars(trim($_POST['delivery_phone_number']));
+        $delivery_email = htmlspecialchars(trim($_POST['delivery_email']));
+    } else {
+        $delivery_first_name = $billing_first_name;
+        $delivery_last_name = $billing_last_name;
+        $delivery_address_1 = $billing_address_1;
+        $delivery_address_2 = $billing_address_2;
+        $delivery_city = $billing_city;
+        $delivery_phone_number = $billing_phone_number;
+        $delivery_email = $billing_email;
+    }
+
+    $shipping_option = htmlspecialchars(trim($_POST['shipping_option']));
+    $timing_option = htmlspecialchars(trim($_POST['timing_option']));
+
+    if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
+        $cart = $_SESSION['Cart'];
+        $total_price = 0;
+
+        // checking if user logged in
+        if (isset($_SESSION['user'])) {
+            $userId = $_SESSION['user']['id'];
+        } else {
+            $userId = null;
+        }
+
+        // checking whether delivery/pickup
+        if ($shipping_option == 'delivery') {
+            $total_price = $_POST['finalTotalDelivery'];
+        } elseif ($shipping_option == 'pickup') {
+            $total_price = $_POST['finalTotalPickup'];
+        } else {
+            // i will add error later
+        }
+
+        if ($timing_option == 'now') {
+            $sql = "INSERT INTO orders (user_id, total_amount, shipping_option, shipping_time)
+                    VALUES (?, ?, ?, NOW())";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sds", $userId, $total_price, $shipping_option);
+        } else {
+            $scheduledDateTime = $_POST['timing_option'];
+            $dateTime = DateTime::createFromFormat('Y-m-d h:i A', $scheduledDateTime);
+            $shipping_time = $dateTime ? $dateTime->format('Y-m-d H:i:s') : null;
+        
+            if ($shipping_time === null) {
+                echo json_encode(['success' => false, 'message' => 'Invalid scheduled date and time.']);
+                exit;
+            }
+        
+            $sql = "INSERT INTO orders (user_id, total_amount, shipping_option, shipping_time)
+                    VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("isss", $userId, $total_price, $shipping_option, $shipping_time);
+        }
+        
+        if ($stmt->execute()) {
+            header("Location: test.php");
+            exit;
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to place the order.']);
+        }
+        
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Cart is empty.']);
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,257 +146,267 @@ session_start();
                 </p>
                 <div class="checkout-page">
                     <div class="checkout-page-left">
+                        <form id="placeOrderForm" method="POST" action="">
 
-                        <div class="checkout-page-billing">
-                            <h3>Billing Details</h3>
-                            <div class="billing-details-form">
-                                <div class="billing-form-row">
-                                    <div class="billing-form-group">
-                                        <div class="entryarea">
-                                            <input type="text" id="first-name" name="first_name" required>
-                                            <div class="labelline">First Name *</div>
+                            <div class="checkout-page-billing">
+                                <h3>Billing Details</h3>
+                                <div class="billing-details-form">
+                                    <div class="billing-form-row">
+                                        <div class="billing-form-group">
+                                            <div class="entryarea">
+                                                <input type="text" id="billing_first-name" name="billing_first_name"
+                                                    required>
+                                                <div class="labelline">First Name *</div>
+                                            </div>
+                                        </div>
+                                        <div class="billing-form-group">
+                                            <div class="entryarea">
+                                                <input type="text" id="billing_last-name" name="billing_last_name"
+                                                    required>
+                                                <div class="labelline">Last Name *</div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="billing-form-group">
+
+                                    <div class="billing-form-group-full">
                                         <div class="entryarea">
-                                            <input type="text" id="last-name" name="last_name" required>
-                                            <div class="labelline">Last Name *</div>
+                                            <input type="text" id="billing_address-1" name="billing_address_1" required>
+                                            <div class="labelline">Address 1 *</div>
                                         </div>
+                                        <small>Street name and number</small>
                                     </div>
-                                </div>
 
-                                <div class="billing-form-group-full">
-                                    <div class="entryarea">
-                                        <input type="text" id="address-1" name="address_1" required>
-                                        <div class="labelline">Address 1 *</div>
-                                    </div>
-                                    <small>Street name and number</small>
-                                </div>
-
-                                <div class="billing-form-group-full">
-                                    <div class="entryarea">
-                                        <input type="text" id="address-2" name="address_2">
-                                        <div class="labelline">Address 2 (optional)</div>
-                                    </div>
-                                    <small>Additional address information</small>
-                                </div>
-
-                                <div class="billing-form-group-full">
-                                    <div class="entryarea">
-                                        <input type="text" id="city" name="city" required>
-                                        <div class="labelline">City *</div>
-                                    </div>
-                                    <small>Select your nearest city</small>
-                                </div>
-
-                                <div class="billing-form-group-full">
-                                    <div class="entryarea">
-                                        <input type="text" id="phone-number" name="phone_number" required>
-                                        <div class="labelline">Phone Number *</div>
-                                    </div>
-                                    <small id="phoneNumberText">Phone Number should be 10 digits</small>
-                                </div>
-
-                                <div class="billing-form-group-full">
-                                    <div class="entryarea">
-                                        <input type="email" id="email" name="email" required>
-                                        <div class="labelline">Email *</div>
-                                    </div>
-                                    <small id="emailText1"></small>
-                                    <small id="emailText2">Example: abc@example.com</small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="checkout-page-section-divider"></div>
-
-                        <div class="checkout-page-billing">
-                            <h3>Who are we delivering to?</h3>
-                            <div class="form-group-checkbox">
-                                <input type="checkbox" name="deliverySender" id="deliverySender" class="custom-checkbox"
-                                    checked>
-                                <label for="deliverySender" class="custom-checkbox-label">
-                                    Same as billing address
-                                </label>
-                            </div>
-
-                            <!-- billing form if user untick deliverySender label -->
-                            <div id="delivery-details-form" class="billing-details-form" style="display: none;">
-                                <div class="billing-form-row">
-                                    <div class="billing-form-group">
+                                    <div class="billing-form-group-full">
                                         <div class="entryarea">
-                                            <input type="text" id="delivery-first-name" name="delivery_first_name"
+                                            <input type="text" id="billing_address-2" name="billing_address_2">
+                                            <div class="labelline">Address 2 (optional)</div>
+                                        </div>
+                                        <small>Additional address information</small>
+                                    </div>
+
+                                    <div class="billing-form-group-full">
+                                        <div class="entryarea">
+                                            <input type="text" id="billing_city" name="billing_city" required>
+                                            <div class="labelline">City *</div>
+                                        </div>
+                                        <small>Select your nearest city</small>
+                                    </div>
+
+                                    <div class="billing-form-group-full">
+                                        <div class="entryarea">
+                                            <input type="text" id="billing_phone-number" name="billing_phone_number"
                                                 required>
-                                            <div class="labelline">First Name *</div>
+                                            <div class="labelline">Phone Number *</div>
                                         </div>
+                                        <small id="phoneNumberText">Phone Number should be 10 digits</small>
                                     </div>
-                                    <div class="billing-form-group">
+
+                                    <div class="billing-form-group-full">
                                         <div class="entryarea">
-                                            <input type="text" id="delivery-last-name" name="delivery_last_name"
-                                                required>
-                                            <div class="labelline">Last Name *</div>
+                                            <input type="email" id="billing_email" name="billing_email" required>
+                                            <div class="labelline">Email *</div>
+                                        </div>
+                                        <small id="emailText1"></small>
+                                        <small id="emailText2">Example: abc@example.com</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="checkout-page-section-divider"></div>
+
+                            <div class="checkout-page-billing">
+                                <h3>Who are we delivering to?</h3>
+                                <div class="form-group-checkbox">
+                                    <input type="checkbox" name="deliverySender" id="deliverySender"
+                                        class="custom-checkbox" checked>
+                                    <label for="deliverySender" class="custom-checkbox-label">
+                                        Same as billing address
+                                    </label>
+                                </div>
+
+                                <!-- billing form if user untick deliverySender label -->
+                                <div id="delivery-details-form" class="billing-details-form" style="display: none;">
+                                    <div class="billing-form-row">
+                                        <div class="billing-form-group">
+                                            <div class="entryarea">
+                                                <input type="text" id="delivery-first-name" name="delivery_first_name"
+                                                    required>
+                                                <div class="labelline">First Name *</div>
+                                            </div>
+                                        </div>
+                                        <div class="billing-form-group">
+                                            <div class="entryarea">
+                                                <input type="text" id="delivery-last-name" name="delivery_last_name"
+                                                    required>
+                                                <div class="labelline">Last Name *</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="billing-form-group-full">
-                                    <div class="entryarea">
-                                        <input type="text" id="delivery-address-1" name="delivery_address_1" required>
-                                        <div class="labelline">Address 1 *</div>
+                                    <div class="billing-form-group-full">
+                                        <div class="entryarea">
+                                            <input type="text" id="delivery-address-1" name="delivery_address_1"
+                                                required>
+                                            <div class="labelline">Address 1 *</div>
+                                        </div>
+                                        <small>Street name and number</small>
                                     </div>
-                                    <small>Street name and number</small>
-                                </div>
 
-                                <div class="billing-form-group-full">
-                                    <div class="entryarea">
-                                        <input type="text" id="delivery-address-2" name="delivery_address_2">
-                                        <div class="labelline">Address 2 (optional)</div>
+                                    <div class="billing-form-group-full">
+                                        <div class="entryarea">
+                                            <input type="text" id="delivery-address-2" name="delivery_address_2">
+                                            <div class="labelline">Address 2 (optional)</div>
+                                        </div>
+                                        <small>Additional address information</small>
                                     </div>
-                                    <small>Additional address information</small>
-                                </div>
 
-                                <div class="billing-form-group-full">
-                                    <div class="entryarea">
-                                        <input type="text" id="delivery-city" name="delivery_city" required>
-                                        <div class="labelline">City *</div>
+                                    <div class="billing-form-group-full">
+                                        <div class="entryarea">
+                                            <input type="text" id="delivery-city" name="delivery_city" required>
+                                            <div class="labelline">City *</div>
+                                        </div>
+                                        <small>Select your nearest city</small>
                                     </div>
-                                    <small>Select your nearest city</small>
-                                </div>
 
-                                <div class="billing-form-group-full">
-                                    <div class="entryarea">
-                                        <input type="text" id="delivery-phone-number" name="delivery_phone_number"
-                                            required>
-                                        <div class="labelline">Phone Number *</div>
+                                    <div class="billing-form-group-full">
+                                        <div class="entryarea">
+                                            <input type="text" id="delivery-phone-number" name="delivery_phone_number"
+                                                required>
+                                            <div class="labelline">Phone Number *</div>
+                                        </div>
+                                        <small id="deliveryPhoneNumberText">Phone Number should be 10 digits</small>
                                     </div>
-                                    <small id="deliveryPhoneNumberText">Phone Number should be 10 digits</small>
-                                </div>
 
-                                <div class="billing-form-group-full">
-                                    <div class="entryarea">
-                                        <input type="email" id="delivery-email" name="delivery_email" required>
-                                        <div class="labelline">Email *</div>
+                                    <div class="billing-form-group-full">
+                                        <div class="entryarea">
+                                            <input type="email" id="delivery-email" name="delivery_email" required>
+                                            <div class="labelline">Email *</div>
+                                        </div>
+                                        <small id="deliveryEmailText">Example: abc@example.com</small>
                                     </div>
-                                    <small id="deliveryEmailText">Example: abc@example.com</small>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="checkout-page-section-divider"></div>
+                            <div class="checkout-page-section-divider"></div>
 
-                        <div class="checkout-page-shipping">
-                            <h3>Shipping Options</h3>
-                            <div class="checkout-page-shipping-container delivery-option"
-                                onclick="selectOption('delivery')">
-                                <div class="checkout-page-shipping-option">
-                                    <p>Delivery</p>
-                                    <p>$<span class="cart-page-delivery-fee"></span></p>
-                                    <p>Deliver at your doorstep via Outer Clove Delivery!</p>
-                                </div>
-                                <div class="checkout-page-shipping-option-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960"
-                                        width="20px" fill="#000000">
-                                        <path
-                                            d="M240-192q-50 0-85-35t-35-85H48v-408q0-29.7 21.15-50.85Q90.3-792 120-792h552v144h120l120 168v168h-72q0 50-35 85t-85 35q-50 0-85-35t-35-85H360q0 50-35 85t-85 35Zm0-72q20.4 0 34.2-13.8Q288-291.6 288-312q0-20.4-13.8-34.2Q260.4-360 240-360q-20.4 0-34.2 13.8Q192-332.4 192-312q0 20.4 13.8 34.2Q219.6-264 240-264ZM120-384h24q17-23 42-35.5t54-12.5q29 0 54 12.5t41.53 35.5H600v-336H120v336Zm600 120q20.4 0 34.2-13.8Q768-291.6 768-312q0-20.4-13.8-34.2Q740.4-360 720-360q-20.4 0-34.2 13.8Q672-332.4 672-312q0 20.4 13.8 34.2Q699.6-264 720-264Zm-48-192 168-1-85-119h-83v120Zm-310-93Z" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="checkout-page-shipping-container pickup-option"
-                                onclick="selectOption('pickup')">
-                                <div class="checkout-page-shipping-option">
-                                    <p>Pickup</p>
-                                    <p><span class="checkout-page-delivery-fee">Free</span></p>
-                                    <p>Visit Outer Clove Restaurant & Pickup your order!</p>
-                                </div>
-                                <div class="checkout-page-shipping-option-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960"
-                                        width="20px" fill="#000000">
-                                        <path
-                                            d="M165-733v-60h632v60H165Zm5 567v-245h-49v-60l44-202h631l44 202v60h-49v245h-60v-245H552v245H170Zm60-60h262v-185H230v185Z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="checkout-page-section-divider"></div>
-
-
-                        <div id="select-pickup-option">
-                            <div class="checkout-page-shipping-option-section">
-                                <h3 id="select-pickup-option-h3">Order For?</h3>
-                                <div class="checkout-page-shipping-option-container">
-                                    <div class="checkout-page-shipping-option-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="21px" viewBox="0 -960 960 960"
-                                            width="21px" fill="#000000">
-                                            <path
-                                                d="M48-192v-72h240v-72H96v-72h192v-72H144v-72h144v-120l-76-161 65-31 91 192h416l-76-161 66-31 90 192v480H48Zm468-264h120q15.3 0 25.65-10.29Q672-476.58 672-491.79t-10.35-25.71Q651.3-528 636-528H516q-15.3 0-25.65 10.29Q480-507.42 480-492.21t10.35 25.71Q500.7-456 516-456ZM360-264h432v-336H360v336Zm0 0v-336 336Z" />
-                                        </svg>
+                            <div class="checkout-page-shipping">
+                                <input type="hidden" name="shipping_option" id="shipping_option" value="">
+                                <h3>Shipping Options</h3>
+                                <div class="checkout-page-shipping-container delivery-option"
+                                    onclick="selectOption('delivery')">
+                                    <div class="checkout-page-shipping-option">
+                                        <p>Delivery</p>
+                                        <p>$<span class="cart-page-delivery-fee"></span></p>
+                                        <p>Deliver at your doorstep via Outer Clove Delivery!</p>
                                     </div>
-                                    <div class="checkout-page-shipping-option-text">
-                                        <p>Now</p>
-                                        <p id="select-pickup-option-p">Order will be ready within 15 min but for
-                                            delivery it takes 30-40 min</p>
-                                    </div>
-                                </div>
-                                <div class="checkout-page-shipping-option-container"
-                                    onclick="showSchedulePopup('schedule-option-text')">
                                     <div class="checkout-page-shipping-option-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960"
                                             width="20px" fill="#000000">
                                             <path
-                                                d="M444-384v-72h72v72h-72Zm-156 0v-72h72v72h-72Zm312 0v-72h72v72h-72ZM444-240v-72h72v72h-72Zm-156 0v-72h72v72h-72Zm312 0v-72h72v72h-72ZM144-96v-672h144v-96h72v96h240v-96h72v96h144v672H144Zm72-72h528v-360H216v360Zm0-432h528v-96H216v96Zm0 0v-96 96Z" />
+                                                d="M240-192q-50 0-85-35t-35-85H48v-408q0-29.7 21.15-50.85Q90.3-792 120-792h552v144h120l120 168v168h-72q0 50-35 85t-85 35q-50 0-85-35t-35-85H360q0 50-35 85t-85 35Zm0-72q20.4 0 34.2-13.8Q288-291.6 288-312q0-20.4-13.8-34.2Q260.4-360 240-360q-20.4 0-34.2 13.8Q192-332.4 192-312q0 20.4 13.8 34.2Q219.6-264 240-264ZM120-384h24q17-23 42-35.5t54-12.5q29 0 54 12.5t41.53 35.5H600v-336H120v336Zm600 120q20.4 0 34.2-13.8Q768-291.6 768-312q0-20.4-13.8-34.2Q740.4-360 720-360q-20.4 0-34.2 13.8Q672-332.4 672-312q0 20.4 13.8 34.2Q699.6-264 720-264Zm-48-192 168-1-85-119h-83v120Zm-310-93Z" />
                                         </svg>
                                     </div>
-                                    <div class="checkout-page-shipping-option-text" id="schedule-option-text">
-                                        <p>Schedule</p>
-                                        <p>Choose a date & time</p>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-
-                        <div class="checkout-page-section-divider"></div>
-                        <div class="checkout-page-payment">
-                            <h3>How would you like to pay?</h3>
-                            <div class="checkout-page-payment-container">
-                                <div class="checkout-page-payment-row">
-                                    <div class="checkout-page-payment-card">
-                                        <p>Visa</p>
+                                <div class="checkout-page-shipping-container pickup-option"
+                                    onclick="selectOption('pickup')">
+                                    <div class="checkout-page-shipping-option">
+                                        <p>Pickup</p>
+                                        <p><span class="checkout-page-delivery-fee">Free</span></p>
+                                        <p>Visit Outer Clove Restaurant & Pickup your order!</p>
                                     </div>
-                                    <div class="checkout-page-payment-images">
-                                        <img src="images/assets/accepted-payment-methods/visa.svg" alt="Visa"
-                                            class="checkout-page-payment-svg">
+                                    <div class="checkout-page-shipping-option-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960"
+                                            width="20px" fill="#000000">
+                                            <path
+                                                d="M165-733v-60h632v60H165Zm5 567v-245h-49v-60l44-202h631l44 202v60h-49v245h-60v-245H552v245H170Zm60-60h262v-185H230v185Z" />
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="checkout-page-payment-container">
-                                <div class="checkout-page-payment-row">
-                                    <div class="checkout-page-payment-card">
-                                        <p>Paypal</p>
+                            <div class="checkout-page-section-divider"></div>
+
+
+                            <div id="select-pickup-option">
+                                <input type="hidden" name="timing_option" id="timing_option" value="">
+                                <div class="checkout-page-shipping-option-section">
+                                    <h3 id="select-pickup-option-h3">Order For?</h3>
+                                    <div class="checkout-page-shipping-option-container">
+                                        <div class="checkout-page-shipping-option-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="21px"
+                                                viewBox="0 -960 960 960" width="21px" fill="#000000">
+                                                <path
+                                                    d="M48-192v-72h240v-72H96v-72h192v-72H144v-72h144v-120l-76-161 65-31 91 192h416l-76-161 66-31 90 192v480H48Zm468-264h120q15.3 0 25.65-10.29Q672-476.58 672-491.79t-10.35-25.71Q651.3-528 636-528H516q-15.3 0-25.65 10.29Q480-507.42 480-492.21t10.35 25.71Q500.7-456 516-456ZM360-264h432v-336H360v336Zm0 0v-336 336Z" />
+                                            </svg>
+                                        </div>
+                                        <div class="checkout-page-shipping-option-text">
+                                            <p>Now</p>
+                                            <p id="select-pickup-option-p">Order will be ready within 15 min but for
+                                                delivery it takes 30-40 min</p>
+                                        </div>
                                     </div>
-                                    <div class="checkout-page-payment-images">
-                                        <img src="images/assets/accepted-payment-methods/paypal.svg" alt="Paypal"
-                                            class="checkout-page-payment-svg paypal-svg">
+                                    <div class="checkout-page-shipping-option-container"
+                                        onclick="showSchedulePopup('schedule-option-text')">
+                                        <div class="checkout-page-shipping-option-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px"
+                                                viewBox="0 -960 960 960" width="20px" fill="#000000">
+                                                <path
+                                                    d="M444-384v-72h72v72h-72Zm-156 0v-72h72v72h-72Zm312 0v-72h72v72h-72ZM444-240v-72h72v72h-72Zm-156 0v-72h72v72h-72Zm312 0v-72h72v72h-72ZM144-96v-672h144v-96h72v96h240v-96h72v96h144v672H144Zm72-72h528v-360H216v360Zm0-432h528v-96H216v96Zm0 0v-96 96Z" />
+                                            </svg>
+                                        </div>
+                                        <div class="checkout-page-shipping-option-text" id="schedule-option-text">
+                                            <p>Schedule</p>
+                                            <p>Choose a date & time</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="place-order">
-                            <div class="form-group-checkbox">
-                                <input type="checkbox" name="agreement.accept" id="agreementAccept"
-                                    class="custom-checkbox">
-                                <label for="agreementAccept" class="custom-checkbox-label">
-                                    I have read and agreed to the terms and conditions
-                                </label>
+
+
+                            <div class="checkout-page-section-divider"></div>
+                            <div class="checkout-page-payment">
+                                <h3>How would you like to pay?</h3>
+                                <div class="checkout-page-payment-container">
+                                    <div class="checkout-page-payment-row">
+                                        <div class="checkout-page-payment-card">
+                                            <p>Visa</p>
+                                        </div>
+                                        <div class="checkout-page-payment-images">
+                                            <img src="images/assets/accepted-payment-methods/visa.svg" alt="Visa"
+                                                class="checkout-page-payment-svg">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="checkout-page-payment-container">
+                                    <div class="checkout-page-payment-row">
+                                        <div class="checkout-page-payment-card">
+                                            <p>Paypal</p>
+                                        </div>
+                                        <div class="checkout-page-payment-images">
+                                            <img src="images/assets/accepted-payment-methods/paypal.svg" alt="Paypal"
+                                                class="checkout-page-payment-svg paypal-svg">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="placeOrder-btn disabled-btn" onclick="placeOrder()"
-                                id="placeOrderButtonContainer">
-                                <button id="placeOrderButton" disabled>Place Order</button>
-                                <span class="placeOrder-arrow">→</span>
+                            <input type="hidden" name="finalTotalDelivery" id="finalTotalDelivery" value="0">
+                            <input type="hidden" name="finalTotalPickup" id="finalTotalPickup" value="0">
+                            <div class="place-order">
+                                <div class="form-group-checkbox">
+                                    <input type="checkbox" name="agreement.accept" id="agreementAccept"
+                                        class="custom-checkbox">
+                                    <label for="agreementAccept" class="custom-checkbox-label">
+                                        I have read and agreed to the terms and conditions
+                                    </label>
+                                </div>
+                                <div class="placeOrder-btn disabled-btn" onclick="placeOrder()"
+                                    id="placeOrderButtonContainer">
+                                    <button id="placeOrderButton" disabled>Place Order</button>
+                                    <span class="placeOrder-arrow">→</span>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                     <div class="checkout-page-right">
                         <div class="cart-page-order-summary">
@@ -399,12 +497,13 @@ session_start();
                             $('.cart-page-delivery-fee').text(data.deliveryFee);
                             $('.cart-page-tax').text(data.tax);
 
-
                             deliveryTotal = data.finalTotalDelivery;
                             pickupTotal = data.finalTotalPickup;
 
-                            $('.cart-page-final-total').text(pickupTotal);
+                            $('#finalTotalDelivery').val(deliveryTotal);
+                            $('#finalTotalPickup').val(pickupTotal);
 
+                            $('.cart-page-final-total').text(pickupTotal);
 
                             // tipppy.js - tax-info
                             tippy('.tax-info', {
@@ -541,6 +640,7 @@ session_start();
 
             // delivery/pickup select
             window.selectOption = function (option) {
+                $('#shipping_option').val(option);
                 $('#delivery-selected').hide();
                 $('#pickup-selected').hide();
 
@@ -566,6 +666,12 @@ session_start();
 
             // select schedule & update date,time text
             window.updateScheduleOption = function (day, time) {
+                const selectedDate = new Date(day);
+                const year = selectedDate.getFullYear();
+                const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                const date = String(selectedDate.getDate()).padStart(2, '0');
+                const scheduledDateTime = `${year}-${month}-${date} ${time}`;
+
                 const formattedDay = new Date(day).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric'
@@ -576,16 +682,20 @@ session_start();
                     .filter(function () {
                         return $(this).text() === 'Choose a date & time';
                     })
-                    .text(scheduleText);
+                    .text(scheduledDateTime);
 
                 $('.checkout-page-shipping-option-container').removeClass('selected');
                 $('.checkout-page-shipping-option-container:contains("Schedule")').addClass('selected');
+
+                $('#timing_option').val(scheduledDateTime);
             };
 
             // select "Now"
             window.selectNowOption = function () {
                 $('.checkout-page-shipping-option-container').removeClass('selected');
                 $('.checkout-page-shipping-option-container:contains("Now")').addClass('selected');
+
+                $('#timing_option').val('now');
             };
 
             $('.checkout-page-shipping-option-container:contains("Now")').on('click', function () {
@@ -610,7 +720,7 @@ session_start();
         function placeOrder() {
             const agreementAccept = document.getElementById('agreementAccept');
             if (agreementAccept.checked) {
-                location.href = '';
+                document.getElementById('checkoutForm').submit();
             } else {
                 alert('Please accept the terms and conditions before placing the order.');
             }

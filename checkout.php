@@ -13,25 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $billing_phone_number = htmlspecialchars(trim($_POST['billing_phone_number']));
     $billing_email = htmlspecialchars(trim($_POST['billing_email']));
 
-    $isSameAsBilling = isset($_POST['deliverySender']);
-
-    if (!$isSameAsBilling) {
-        $delivery_first_name = htmlspecialchars(trim($_POST['delivery_first_name']));
-        $delivery_last_name = htmlspecialchars(trim($_POST['delivery_last_name']));
-        $delivery_address_1 = htmlspecialchars(trim($_POST['delivery_address_1']));
-        $delivery_address_2 = htmlspecialchars(trim($_POST['delivery_address_2']));
-        $delivery_city = htmlspecialchars(trim($_POST['delivery_city']));
-        $delivery_phone_number = htmlspecialchars(trim($_POST['delivery_phone_number']));
-        $delivery_email = htmlspecialchars(trim($_POST['delivery_email']));
-    } else {
-        $delivery_first_name = $billing_first_name;
-        $delivery_last_name = $billing_last_name;
-        $delivery_address_1 = $billing_address_1;
-        $delivery_address_2 = $billing_address_2;
-        $delivery_city = $billing_city;
-        $delivery_phone_number = $billing_phone_number;
-        $delivery_email = $billing_email;
-    }
+    $delivery_first_name = htmlspecialchars(trim($_POST['delivery_first_name']));
+    $delivery_last_name = htmlspecialchars(trim($_POST['delivery_last_name']));
+    $delivery_address_1 = htmlspecialchars(trim($_POST['delivery_address_1']));
+    $delivery_address_2 = htmlspecialchars(trim($_POST['delivery_address_2']));
+    $delivery_city = htmlspecialchars(trim($_POST['delivery_city']));
+    $delivery_phone_number = htmlspecialchars(trim($_POST['delivery_phone_number']));
+    $delivery_email = htmlspecialchars(trim($_POST['delivery_email']));
 
     $shipping_option = htmlspecialchars(trim($_POST['shipping_option']));
     $timing_option = htmlspecialchars(trim($_POST['timing_option']));
@@ -65,25 +53,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $scheduledDateTime = $_POST['timing_option'];
             $dateTime = DateTime::createFromFormat('Y-m-d h:i A', $scheduledDateTime);
             $shipping_time = $dateTime ? $dateTime->format('Y-m-d H:i:s') : null;
-        
+
             if ($shipping_time === null) {
                 echo json_encode(['success' => false, 'message' => 'Invalid scheduled date and time.']);
                 exit;
             }
-        
+
             $sql = "INSERT INTO orders (user_id, total_amount, shipping_option, shipping_time)
                     VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("isss", $userId, $total_price, $shipping_option, $shipping_time);
         }
-        
+
         if ($stmt->execute()) {
+
+            $order_id = $conn->insert_id;
+
+            $sql = "INSERT INTO addresses (user_id, order_id, address_type, first_name, last_name, address_1, address_2, city, phone_number, email)
+                    VALUES (?, ?, 'billing', ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("iisssssis", $userId, $order_id, $billing_first_name, $billing_last_name, $billing_address_1, $billing_address_2, $billing_city, $billing_phone_number, $billing_email);
+            $stmt->execute();
+
+            if (!isset($_POST['deliverySender'])) {
+                $sql = "INSERT INTO addresses (user_id, order_id, address_type, first_name, last_name, address_1, address_2, city, phone_number, email)
+                        VALUES (?, ?, 'shipping', ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("iisssssis", $userId, $order_id, $delivery_first_name, $delivery_last_name, $delivery_address_1, $delivery_address_2, $delivery_city, $delivery_phone_number, $delivery_email);
+                $stmt->execute();
+            }
+
+            foreach ($cart as $product_id => $quantity) {
+                $sql = "SELECT product_price FROM products WHERE product_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $product_id);
+                $stmt->execute();
+                $stmt->bind_result($product_price);
+                $stmt->fetch();
+                $stmt->close();
+
+                $sql = "INSERT INTO order_items (order_id, product_id, quantity, price)
+                        VALUES (?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("iiid", $order_id, $product_id, $quantity, $product_price);
+                $stmt->execute();
+            }
+
             header("Location: test.php");
             exit;
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to place the order.']);
         }
-        
+
     } else {
         echo json_encode(['success' => false, 'message' => 'Cart is empty.']);
     }
@@ -326,7 +347,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="checkout-page-section-divider"></div>
 
-
                             <div id="select-pickup-option">
                                 <input type="hidden" name="timing_option" id="timing_option" value="">
                                 <div class="checkout-page-shipping-option-section">
@@ -361,7 +381,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                 </div>
                             </div>
-
 
                             <div class="checkout-page-section-divider"></div>
                             <div class="checkout-page-payment">
@@ -611,33 +630,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             });
 
-            // deliverySender tick/untick procedure
-            document.getElementById('deliverySender').addEventListener('change', function () {
-                const deliveryForm = document.getElementById('delivery-details-form');
-
-                if (this.checked) {
-                    deliveryForm.style.display = 'none';
-
-                    document.getElementById('delivery-first-name').value = document.getElementById('first-name').value;
-                    document.getElementById('delivery-last-name').value = document.getElementById('last-name').value;
-                    document.getElementById('delivery-address-1').value = document.getElementById('address-1').value;
-                    document.getElementById('delivery-address-2').value = document.getElementById('address-2').value;
-                    document.getElementById('delivery-city').value = document.getElementById('city').value;
-                    document.getElementById('delivery-phone-number').value = document.getElementById('phone-number').value;
-                    document.getElementById('delivery-email').value = document.getElementById('email').value;
-                } else {
-                    deliveryForm.style.display = 'block';
-
-                    document.getElementById('delivery-first-name').value = '';
-                    document.getElementById('delivery-last-name').value = '';
-                    document.getElementById('delivery-address-1').value = '';
-                    document.getElementById('delivery-address-2').value = '';
-                    document.getElementById('delivery-city').value = '';
-                    document.getElementById('delivery-phone-number').value = '';
-                    document.getElementById('delivery-email').value = '';
-                }
-            });
-
             // delivery/pickup select
             window.selectOption = function (option) {
                 $('#shipping_option').val(option);
@@ -725,6 +717,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 alert('Please accept the terms and conditions before placing the order.');
             }
         }
+
+        // deliverySender tick/untick procedure
+        document.addEventListener('DOMContentLoaded', function () {
+            const deliverySenderCheckbox = document.getElementById('deliverySender');
+            const deliveryDetailsForm = document.getElementById('delivery-details-form');
+
+            function toggleDeliveryDetails() {
+                if (deliverySenderCheckbox.checked) {
+                    deliveryDetailsForm.style.display = 'none';
+                    document.querySelectorAll('#delivery-details-form input').forEach(function (input) {
+                        if (input.id !== 'delivery-address-2') {
+                            input.removeAttribute('required');
+                        }
+                    });
+                } else {
+                    deliveryDetailsForm.style.display = 'block';
+                    document.querySelectorAll('#delivery-details-form input').forEach(function (input) {
+                        if (input.id !== 'delivery-address-2') {
+                            input.setAttribute('required', 'required');
+                        }
+                    });
+                }
+            }
+            toggleDeliveryDetails();
+
+            deliverySenderCheckbox.addEventListener('change', toggleDeliveryDetails);
+        });
 
     </script>
 

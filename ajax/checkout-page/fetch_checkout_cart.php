@@ -65,7 +65,9 @@ if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
             'tax' => number_format($tax, 2),
             'taxRate' => $tax_rate_percentage . '%',
             'finalTotalPickup' => number_format($final_total_pickup, 2),
-            'finalTotalDelivery' => number_format($final_total_delivery, 2)
+            'finalTotalDelivery' => number_format($final_total_delivery, 2),
+            'finalTotalPickupValue' => number_format($final_total_pickup, 2, '.', ''),
+            'finalTotalDeliveryValue' => number_format($final_total_delivery, 2, '.', '')
         ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'No products found in cart.']);

@@ -530,11 +530,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $('.cart-page-delivery-fee').text(data.deliveryFee);
                             $('.cart-page-tax').text(data.tax);
 
+                            $('#finalTotalDelivery').val(data.finalTotalDeliveryValue);
+                            $('#finalTotalPickup').val(data.finalTotalPickupValue);
+
                             deliveryTotal = data.finalTotalDelivery;
                             pickupTotal = data.finalTotalPickup;
-
-                            $('#finalTotalDelivery').val(deliveryTotal);
-                            $('#finalTotalPickup').val(pickupTotal);
 
                             $('.cart-page-final-total').text(pickupTotal);
 

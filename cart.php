@@ -226,6 +226,12 @@ session_start();
                 }
             }
 
+            window.addEventListener('storage', function (event) {
+                if (event.key === 'cartUpdated') {
+                    refetchCart();
+                }
+            });
+
             refetchCart();
 
             $(document).on('click', '.remove-btn', function () {
@@ -240,6 +246,9 @@ session_start();
                         var data = JSON.parse(response);
 
                         if (data.success) {
+
+                            localStorage.setItem('cartUpdated', Date.now());
+
                             itemRow.addClass('fade-out');
                             setTimeout(function () {
                                 refetchCart();
@@ -290,7 +299,10 @@ session_start();
                     },
                     success: function (data) {
                         if (data.success) {
+
+                            localStorage.setItem('cartUpdated', Date.now());
                             refetchCart();
+                            
                             const Toast = Swal.mixin({
                                 toast: true,
                                 position: "top-end",

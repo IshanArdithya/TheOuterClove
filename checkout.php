@@ -5,8 +5,8 @@ session_start();
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $conn->begin_transaction(); // Start a transaction
-    
+    $conn->begin_transaction();
+
     try {
         $billing_first_name = htmlspecialchars(trim($_POST['billing_first_name']));
         $billing_last_name = htmlspecialchars(trim($_POST['billing_last_name']));
@@ -575,6 +575,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
+            // event to refetch cart when cart product updated
+            window.addEventListener('storage', function (event) {
+                if (event.key === 'cartUpdated') {
+                    refetchCart();
+                }
+            });
+
             refetchCart();
 
             // billing details form
@@ -629,7 +636,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 input.addEventListener('blur', function () {
                     if (input.value) {
                         input.classList.add('has-value');
-                        // input.classList.remove('error');
                     } else {
                         input.classList.remove('has-value');
                         if (input.hasAttribute('required')) {
@@ -637,11 +643,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     }
                 });
-
-                // input.addEventListener('focus', function () {
-                //     input.classList.remove('error');
-                // });
-
             });
 
             // delivery/pickup select

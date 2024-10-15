@@ -132,6 +132,8 @@ $conn->close();
                         .then(data => {
                             if (data.success) {
 
+                                localStorage.setItem('cartUpdated', Date.now());
+
                                 const Toast = Swal.mixin({
                                     toast: true,
                                     position: "top-end",
@@ -223,6 +225,8 @@ $conn->close();
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
+
+                                    localStorage.setItem('cartUpdated', Date.now());
 
                                     const Toast = Swal.mixin({
                                         toast: true,

@@ -5,7 +5,7 @@ include_once '../connectdb.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'deleteProduct') {
     $productId = intval($_POST['id']);
 
-    $sql = "SELECT image_path FROM products WHERE id = ?";
+    $sql = "SELECT image_path FROM products WHERE product_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $productId);
     $stmt->execute();
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
         echo json_encode(['success' => false, 'error' => 'Image path not found']);
     }
 
-    $sql = "DELETE FROM products WHERE id = ?";
+    $sql = "DELETE FROM products WHERE product_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $productId);
     if ($stmt->execute()) {
@@ -40,13 +40,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
         $updated_price = trim($_GET['price']);
         $updated_description = trim($_GET['description']);
 
-        $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
+        $stmt = $conn->prepare("SELECT * FROM products WHERE product_id = ?");
         $stmt->bind_param('i', $product_id);
         $stmt->execute();
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $stmt = $conn->prepare("UPDATE products SET product_title = ?, product_price = ?, product_description = ? WHERE id = ?");
+            $stmt = $conn->prepare("UPDATE products SET product_title = ?, product_price = ?, product_description = ? WHERE product_id = ?");
             $stmt->bind_param('sdsi', $updated_name, $updated_price, $updated_description, $product_id);
             if ($stmt->execute()) {
                 echo "<script>
@@ -160,14 +160,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
                     <tbody>
                         <?php
 
-                        $sql = "SELECT * FROM products ORDER BY id";
+                        $sql = "SELECT * FROM products ORDER BY product_id";
                         $result = mysqli_query($conn, $sql);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo "<tr>";
                                 echo "<td><img src='../" . $row['image_path'] . "' alt='Product Image' class='productimg'></td>";
-                                echo "<td>" . $row['id'] . "</td>";
+                                echo "<td>" . $row['product_id'] . "</td>";
                                 echo "<td>" . $row['product_title'] . "</td>";
                                 $product_description = $row["product_description"];
                                 $truncated_product_description = (strlen($product_description) > 8) ? substr($product_description, 0, 30) . '...' : $product_description;
@@ -175,8 +175,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
                                 echo "<td>" . $row['product_price'] . "</td>";
                                 ;
                                 echo "<td>";
-                                echo "<a href='#' class='btn-secondary' onclick='updateProduct(\"" . $row['id'] . "\", \"" . $row['product_title'] . "\", \"" . $row['product_description'] . "\", \"" . $row['product_price'] . "\", \"" . $row['image_path'] . "\")'>Update</a>";
-                                echo "<a href='#' class='btn-danger' onclick='deleteProduct(\"" . $row['id'] . "\", \"" . $row['product_title'] . "\")'>Delete</a>";
+                                echo "<a href='#' class='btn-secondary' onclick='updateProduct(\"" . $row['product_id'] . "\", \"" . $row['product_title'] . "\", \"" . $row['product_description'] . "\", \"" . $row['product_price'] . "\", \"" . $row['image_path'] . "\")'>Update</a>";
+                                echo "<a href='#' class='btn-danger' onclick='deleteProduct(\"" . $row['product_id'] . "\", \"" . $row['product_title'] . "\")'>Delete</a>";
                                 echo "</td>";
                                 echo "</tr>";
                             }

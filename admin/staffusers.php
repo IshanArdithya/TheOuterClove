@@ -5,7 +5,7 @@ include_once '../connectdb.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'deleteStaff') {
     $userId = intval($_POST['id']);
 
-    $sql = "DELETE FROM staff_users WHERE id = ?";
+    $sql = "DELETE FROM staff_users WHERE staff_user_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userId);
     if ($stmt->execute()) {
@@ -59,16 +59,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
             $roleName = 'All Staff';
 
             if ($roleFilter == 'admin') {
-                $sql = "SELECT * FROM staff_users WHERE role = 'admin' ORDER BY id ASC";
+                $sql = "SELECT * FROM staff_users WHERE role = 'admin' ORDER BY staff_user_id ASC";
                 $roleName = 'Admins';
             } elseif ($roleFilter == 'manager') {
-                $sql = "SELECT * FROM staff_users WHERE role = 'manager' ORDER BY id ASC";
+                $sql = "SELECT * FROM staff_users WHERE role = 'manager' ORDER BY staff_user_id ASC";
                 $roleName = 'Managers';
             } elseif ($roleFilter == 'staff') {
-                $sql = "SELECT * FROM staff_users WHERE role = 'staff' ORDER BY id ASC";
+                $sql = "SELECT * FROM staff_users WHERE role = 'staff' ORDER BY staff_user_id ASC";
                 $roleName = 'Staff';
             } else {
-                $sql = "SELECT * FROM staff_users ORDER BY id ASC";
+                $sql = "SELECT * FROM staff_users ORDER BY staff_user_id ASC";
                 $roleName = 'All Staff';
             }
             $result = mysqli_query($conn, $sql);

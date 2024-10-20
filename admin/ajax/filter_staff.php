@@ -6,16 +6,16 @@ $roleFilter = isset($_GET['role']) ? $_GET['role'] : 'all';
 $roleName = 'All Staff';
 
 if ($roleFilter == 'admin') {
-    $sql = "SELECT * FROM staff_users WHERE role = 'admin' ORDER BY id ASC";
+    $sql = "SELECT * FROM staff_users WHERE role = 'admin' ORDER BY staff_user_id ASC";
     $roleName = 'Admins';
 } elseif ($roleFilter == 'manager') {
-    $sql = "SELECT * FROM staff_users WHERE role = 'manager' ORDER BY id ASC";
+    $sql = "SELECT * FROM staff_users WHERE role = 'manager' ORDER BY staff_user_id ASC";
     $roleName = 'Managers';
 } elseif ($roleFilter == 'staff') {
-    $sql = "SELECT * FROM staff_users WHERE role = 'staff' ORDER BY id ASC";
+    $sql = "SELECT * FROM staff_users WHERE role = 'staff' ORDER BY staff_user_id ASC";
     $roleName = 'Staff';
 } else {
-    $sql = "SELECT * FROM staff_users ORDER BY id ASC";
+    $sql = "SELECT * FROM staff_users ORDER BY staff_user_id ASC";
     $roleName = 'All Staff';
 }
 
@@ -26,14 +26,14 @@ $output .= '<table><thead><tr><th>ID</th><th>First Name</th><th>Last Name</th><t
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $output .= "<tr>";
-        $output .= "<td>" . $row['id'] . "</td>";
+        $output .= "<td>" . $row['staff_user_id'] . "</td>";
         $output .= "<td>" . $row['first_name'] . "</td>";
         $output .= "<td>" . $row['last_name'] . "</td>";
         $output .= "<td>" . $row['email'] . "</td>";
-        $output .= "<td>" . roleDropdown($row['role'], $row['id'], $row['first_name'] . ' ' . $row['last_name']) . "</td>";
-        $output .= "<td>" . statusDropdown($row['status'], $row['id'], $row['first_name'] . ' ' . $row['last_name']) . "</td>";
+        $output .= "<td>" . roleDropdown($row['role'], $row['staff_user_id'], $row['first_name'] . ' ' . $row['last_name']) . "</td>";
+        $output .= "<td>" . statusDropdown($row['status'], $row['staff_user_id'], $row['first_name'] . ' ' . $row['last_name']) . "</td>";
         $output .= "<td>";
-        $output .= "<a href='#' class='btn-danger' onclick='deleteStaff(\"" . $row['id'] . "\", \"" . $row['first_name'] . " " . $row['last_name'] . "\",\"" . $row['role'] . "\")'>Delete</a>";
+        $output .= "<a href='#' class='btn-danger' onclick='deleteStaff(\"" . $row['staff_user_id'] . "\", \"" . $row['first_name'] . " " . $row['last_name'] . "\",\"" . $row['role'] . "\")'>Delete</a>";
         $output .= "</td>";
         $output .= "</tr>";
     }

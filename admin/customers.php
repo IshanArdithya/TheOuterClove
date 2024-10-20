@@ -6,7 +6,7 @@ include_once '../connectdb.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'deleteUser') {
     $userID = intval($_POST['id']);
 
-    $sql = "DELETE FROM users WHERE id = ?";
+    $sql = "DELETE FROM users WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userID);
     if ($stmt->execute()) {
@@ -64,19 +64,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
                     <tbody>
                         <?php
 
-                        $sql = "SELECT * FROM users ORDER BY id DESC";
+                        $sql = "SELECT * FROM users ORDER BY user_id DESC";
                         $result = mysqli_query($conn, $sql);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo "<tr>";
-                                echo "<td>" . $row['id'] . "</td>";
+                                echo "<td>" . $row['user_id'] . "</td>";
                                 echo "<td>" . $row['first_name'] . "</td>";
                                 echo "<td>" . $row['last_name'] . "</td>";
                                 echo "<td>" . $row['email'] . "</td>";
                                 echo "<td>" . $row["registered_date"] . "</td>";
                                 echo "<td>";
-                                echo "<a href='#' class='btn-danger' onclick='deleteUser(\"" . $row['id'] . "\", \"" . $row['first_name'] . " " . $row['last_name'] . "\")'>Delete User</a>";
+                                echo "<a href='#' class='btn-danger' onclick='deleteUser(\"" . $row['user_id'] . "\", \"" . $row['first_name'] . " " . $row['last_name'] . "\")'>Delete User</a>";
                                 echo "</td>";
                                 echo "</tr>";
                             }

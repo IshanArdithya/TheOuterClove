@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
     $userId = intval($_POST['id']);
     $newStatus = $_POST['status'];
 
-    $sql = "UPDATE staff_users SET status = ? WHERE id = ?";
+    $sql = "UPDATE staff_users SET status = ? WHERE staff_user_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("si", $newStatus, $userId);
     if ($stmt->execute()) {

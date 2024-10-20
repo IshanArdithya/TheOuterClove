@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         if ($user['status'] === 'active') {
             if (password_verify($password, $user['password'])) {
                 $_SESSION['staff'] = [
-                    'id' => $user['id'],
+                    'id' => $user['staff_user_id'],
                     'email' => $user['email'],
                     'role' => $user['role']
                 ];

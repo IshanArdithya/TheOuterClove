@@ -2351,7 +2351,8 @@ input[type="radio"]:checked + .feedback-navigation label {
 
 .checkout-page-shipping-container.selected,
 .checkout-page-shipping-option-container.selected,
-.time-option-label.selected {
+.time-option-label.selected,
+.checkout-page-payment-container.selected {
   border-color: #000000;
   background-color: #f8f8f878;
   border-bottom: 3px solid #000000;
@@ -2389,12 +2390,15 @@ input[type="radio"]:checked + .feedback-navigation label {
   margin-top: 50px;
 }
 
+.place-order-button {
+width: 30%;
+}
+
 .placeOrder-btn {
   position: relative;
   display: inline-block;
   cursor: pointer;
   background-color: black;
-  width: 30%;
   padding: 15px 50px 15px 20px;
   border: 2px solid black;
   transition: all 0.3s ease;
@@ -2438,6 +2442,34 @@ input[type="radio"]:checked + .feedback-navigation label {
   color: black;
   right: 25px;
 }
+
+#paypal-button-container .paypal-button {
+  display: inline-block;
+  cursor: pointer;
+  background-color: black !important;
+  border: 2px solid black !important;
+  padding: 15px 50px 15px 20px;
+  transition: all 0.3s ease;
+  text-align: left;
+  margin-bottom: 60px;
+  font-family: "Bree Serif", serif;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+#paypal-button-container .paypal-button:hover {
+  background-color: white !important;
+}
+
+#paypal-button-container .paypal-button .paypal-button-text {
+  color: white !important;
+}
+
+#paypal-button-container .paypal-button:hover .paypal-button-text {
+  color: black !important;
+}
+
 
 .tippy-box {
   text-align: left !important;

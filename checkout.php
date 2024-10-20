@@ -1,129 +1,12 @@
 <?php
 include 'connectdb.php';
+require 'vendor/autoload.php';
 session_start();
-?>
 
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $conn->begin_transaction();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-    try {
-        $billing_first_name = htmlspecialchars(trim($_POST['billing_first_name']));
-        $billing_last_name = htmlspecialchars(trim($_POST['billing_last_name']));
-        $billing_address_1 = htmlspecialchars(trim($_POST['billing_address_1']));
-        $billing_address_2 = htmlspecialchars(trim($_POST['billing_address_2']));
-        $billing_city = htmlspecialchars(trim($_POST['billing_city']));
-        $billing_phone_number = htmlspecialchars(trim($_POST['billing_phone_number']));
-        $billing_email = htmlspecialchars(trim($_POST['billing_email']));
-
-        $delivery_first_name = htmlspecialchars(trim($_POST['delivery_first_name']));
-        $delivery_last_name = htmlspecialchars(trim($_POST['delivery_last_name']));
-        $delivery_address_1 = htmlspecialchars(trim($_POST['delivery_address_1']));
-        $delivery_address_2 = htmlspecialchars(trim($_POST['delivery_address_2']));
-        $delivery_city = htmlspecialchars(trim($_POST['delivery_city']));
-        $delivery_phone_number = htmlspecialchars(trim($_POST['delivery_phone_number']));
-        $delivery_email = htmlspecialchars(trim($_POST['delivery_email']));
-
-        $shipping_option = htmlspecialchars(trim($_POST['shipping_option']));
-        $timing_option = htmlspecialchars(trim($_POST['timing_option']));
-
-        if (isset($_SESSION['Cart']) && !empty($_SESSION['Cart'])) {
-            $cart = $_SESSION['Cart'];
-            $total_price = 0;
-
-            // checking if user logged in
-            if (isset($_SESSION['user'])) {
-                $userId = $_SESSION['user']['id'];
-            } else {
-                $userId = null;
-            }
-
-            // checking whether delivery/pickup
-            if ($shipping_option == 'delivery') {
-                $total_price = $_POST['finalTotalDelivery'];
-            } elseif ($shipping_option == 'pickup') {
-                $total_price = $_POST['finalTotalPickup'];
-            }
-
-            // now/scheduled time
-            if ($timing_option == 'now') {
-                $sql = "INSERT INTO orders (user_id, total_amount, shipping_option, shipping_time)
-                        VALUES (?, ?, ?, NOW())";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("sds", $userId, $total_price, $shipping_option);
-            } else {
-                $scheduledDateTime = $_POST['timing_option'];
-                $dateTime = DateTime::createFromFormat('Y-m-d h:i A', $scheduledDateTime);
-                $shipping_time = $dateTime ? $dateTime->format('Y-m-d H:i:s') : null;
-
-                if ($shipping_time === null) {
-                    throw new Exception('Invalid scheduled date and time.');
-                }
-
-                $sql = "INSERT INTO orders (user_id, total_amount, shipping_option, shipping_time)
-                        VALUES (?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("isss", $userId, $total_price, $shipping_option, $shipping_time);
-            }
-
-            if (!$stmt->execute()) {
-                throw new Exception('Failed to insert order.');
-            }
-
-            $order_id = $conn->insert_id;
-
-            // billing address
-            $sql = "INSERT INTO addresses (user_id, order_id, address_type, first_name, last_name, address_1, address_2, city, phone_number, email)
-                    VALUES (?, ?, 'billing', ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("iisssssis", $userId, $order_id, $billing_first_name, $billing_last_name, $billing_address_1, $billing_address_2, $billing_city, $billing_phone_number, $billing_email);
-            if (!$stmt->execute()) {
-                throw new Exception('Failed to insert billing address.');
-            }
-
-            // shipping address if deliverySender is not checked
-            if (!isset($_POST['deliverySender'])) {
-                $sql = "INSERT INTO addresses (user_id, order_id, address_type, first_name, last_name, address_1, address_2, city, phone_number, email)
-                        VALUES (?, ?, 'shipping', ?, ?, ?, ?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("iisssssis", $userId, $order_id, $delivery_first_name, $delivery_last_name, $delivery_address_1, $delivery_address_2, $delivery_city, $delivery_phone_number, $delivery_email);
-                if (!$stmt->execute()) {
-                    throw new Exception('Failed to insert shipping address.');
-                }
-            }
-
-            // order items
-            foreach ($cart as $product_id => $quantity) {
-                $sql = "SELECT product_price FROM products WHERE product_id = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $product_id);
-                $stmt->execute();
-                $stmt->bind_result($product_price);
-                $stmt->fetch();
-                $stmt->close();
-
-                $sql = "INSERT INTO order_items (order_id, product_id, quantity, price)
-                        VALUES (?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("iiid", $order_id, $product_id, $quantity, $product_price);
-                if (!$stmt->execute()) {
-                    throw new Exception('Failed to insert order items.');
-                }
-            }
-
-            $conn->commit();
-
-            header("Location: test.php");
-            exit;
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Cart is empty.']);
-        }
-    } catch (Exception $e) {
-        $conn->rollback();
-        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-    }
-}
-
+$paypalClientId = $_ENV['PAYPAL_CLIENT_ID'];
 ?>
 
 <!DOCTYPE html>
@@ -143,6 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6.3.1/dist/tippy-bundle.umd.min.js"></script>
+
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=<?php echo $paypalClientId; ?>&currency=USD&disable-funding=card"></script>
 
 
 </head>
@@ -397,9 +283,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="checkout-page-section-divider"></div>
+
+                            <input type="hidden" id="payment_method" name="payment_method" value="">
+
                             <div class="checkout-page-payment">
                                 <h3>How would you like to pay?</h3>
-                                <div class="checkout-page-payment-container">
+                                <div class="checkout-page-payment-container visa-option"
+                                    onclick="selectPaymentMethod('visa')">
                                     <div class="checkout-page-payment-row">
                                         <div class="checkout-page-payment-card">
                                             <p>Visa</p>
@@ -411,7 +301,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                 </div>
 
-                                <div class="checkout-page-payment-container">
+                                <div class="checkout-page-payment-container paypal-option"
+                                    onclick="selectPaymentMethod('paypal')">
                                     <div class="checkout-page-payment-row">
                                         <div class="checkout-page-payment-card">
                                             <p>Paypal</p>
@@ -433,10 +324,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         I have read and agreed to the terms and conditions
                                     </label>
                                 </div>
-                                <div class="placeOrder-btn disabled-btn" onclick="placeOrder()"
-                                    id="placeOrderButtonContainer">
-                                    <button id="placeOrderButton" disabled>Place Order</button>
-                                    <span class="placeOrder-arrow">→</span>
+                                <div class="place-order-button">
+
+                                    <div class="placeOrder-btn disabled-btn" onclick="placeOrder()"
+                                        id="placeOrderButtonContainer">
+                                        <button id="placeOrderButton" disabled>Place Order</button>
+                                        <span class="placeOrder-arrow">→</span>
+                                    </div>
+
+                                    <div id="paypal-button-container" style="display: none;"></div>
+
                                 </div>
                             </div>
                         </form>
@@ -658,6 +555,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $('#select-pickup-option-p').text('Deliver in 30-40 min');
 
+                    // enables disabled Shipping Option Containers
                     $('.checkout-page-shipping-option-container:contains("Now"), .checkout-page-shipping-option-container:contains("Schedule")').removeClass('disabled-container').css('pointer-events', 'auto');
 
                 } else if (option === 'pickup') {
@@ -667,6 +565,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $('#select-pickup-option-p').text('Order will be ready in 15 min');
 
+                    // enables disabled Shipping Option Containers
                     $('.checkout-page-shipping-option-container:contains("Now"), .checkout-page-shipping-option-container:contains("Schedule")').removeClass('disabled-container').css('pointer-events', 'auto');
                 }
             };
@@ -711,27 +610,119 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         });
 
-        document.getElementById('agreementAccept').addEventListener('change', function () {
-            const placeOrderButton = document.getElementById('placeOrderButton');
-            const placeOrderButtonContainer = document.getElementById('placeOrderButtonContainer');
+        document.getElementById('placeOrderButtonContainer').style.display = 'block';
 
-            if (this.checked) {
-                placeOrderButton.disabled = false;
-                placeOrderButtonContainer.classList.remove('disabled-btn');
-            } else {
-                placeOrderButton.disabled = true;
-                placeOrderButtonContainer.classList.add('disabled-btn');
-            }
-        });
+        function selectPaymentMethod(method) {
 
-        function placeOrder() {
-            const agreementAccept = document.getElementById('agreementAccept');
-            if (agreementAccept.checked) {
-                document.getElementById('checkoutForm').submit();
-            } else {
-                alert('Please accept the terms and conditions before placing the order.');
+            document.getElementById('placeOrderButtonContainer').style.display = 'none';
+            document.getElementById('paypal-button-container').style.display = 'none';
+
+            if (method === 'visa') {
+                document.getElementById('payment_method').value = 'credit_card';
+                document.getElementById('placeOrderButtonContainer').style.display = 'block';
+                document.getElementById('placeOrderButton').disabled = false;
+
+                $('.visa-option').addClass('selected');
+                $('.paypal-option').removeClass('selected');
+                
+            } else if (method === 'paypal') {
+                document.getElementById('payment_method').value = 'paypal';
+                document.getElementById('paypal-button-container').style.display = 'block';
+
+                $('.visa-option').removeClass('selected');
+                $('.paypal-option').addClass('selected');
+
             }
         }
+
+        function placeOrder() {
+            $.ajax({
+                url: 'backend/process_order.php',
+                type: 'POST',
+                data: $('#placeOrderForm').serialize(),
+                success: function (response) {
+                    try {
+                        response = JSON.parse(response);
+                        if (response.success) {
+                            window.location.href = 'success.php';
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    } catch (error) {
+                        alert('Failed to process order. Please try again.');
+                    }
+                },
+
+            });
+        }
+
+        function showPaypalButton() {
+            document.getElementById('placeOrderButtonContainer').style.display = 'none';
+            document.getElementById('paypal-button-container').style.display = 'block';
+        }
+
+        paypal.Buttons({
+            style: {
+                layout: 'horizontal',
+                color: 'black',
+                shape: 'rect',
+                label: 'paypal',
+                tagline: false
+            },
+            createOrder: function (data, actions) {
+                let selectedOption = $('#shipping_option').val();
+                let totalPrice = 0;
+
+                if (selectedOption === 'delivery') {
+                    totalPrice = parseFloat(deliveryTotal);
+                } else if (selectedOption === 'pickup') {
+                    totalPrice = parseFloat(pickupTotal);
+                }
+
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: totalPrice.toFixed(2)
+                        }
+                    }]
+                });
+            },
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (details) {
+
+                    if (details.status === 'COMPLETED') {
+
+                        const formData = $('#placeOrderForm').serialize() + '&paypal_transaction_id=' + encodeURIComponent(details.id);
+                        
+                        $.ajax({
+                            url: 'backend/process_order.php',
+                            type: 'POST',
+                            data: formData,
+                            success: function (response) {
+                                try {
+                                    response = JSON.parse(response);
+                                    if (response.success) {
+                                        window.location.href = 'success.php';
+                                    } else {
+                                        alert('Error: ' + response.message);
+                                    }
+                                } catch (e) {
+                                    alert('Error: Invalid response from server.');
+                                }
+                            },
+                            error: function () {
+                                alert('Failed to complete PayPal order.');
+                            }
+                        });
+                    }
+                });
+            },
+            onError: function (err) {
+                console.error(err);
+                alert('Payment failed! Please try again.');
+            }
+        }).render('#paypal-button-container');
+
 
         // deliverySender tick/untick procedure
         document.addEventListener('DOMContentLoaded', function () {
@@ -763,6 +754,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
 
     <script src="js/checkout-page/schedule-popup.js" defer></script>
+
+    <script src="js/checkout-page/validate-form.js"></script>
 
 </body>
 

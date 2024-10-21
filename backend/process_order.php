@@ -16,14 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $billing_phone_number = htmlspecialchars(trim($_POST['billing_phone_number']));
         $billing_email = htmlspecialchars(trim($_POST['billing_email']));
 
-        $delivery_first_name = htmlspecialchars(trim($_POST['delivery_first_name']));
-        $delivery_last_name = htmlspecialchars(trim($_POST['delivery_last_name']));
-        $delivery_address_1 = htmlspecialchars(trim($_POST['delivery_address_1']));
-        $delivery_address_2 = htmlspecialchars(trim($_POST['delivery_address_2']));
-        $delivery_city = htmlspecialchars(trim($_POST['delivery_city']));
-        $delivery_phone_number = htmlspecialchars(trim($_POST['delivery_phone_number']));
-        $delivery_email = htmlspecialchars(trim($_POST['delivery_email']));
-
         $shipping_option = htmlspecialchars(trim($_POST['shipping_option']));
         $timing_option = htmlspecialchars(trim($_POST['timing_option']));
 
@@ -83,6 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // shipping address if deliverySender is not checked
             if (!isset($_POST['deliverySender'])) {
+                $delivery_first_name = htmlspecialchars(trim($_POST['delivery_first_name']));
+                $delivery_last_name = htmlspecialchars(trim($_POST['delivery_last_name']));
+                $delivery_address_1 = htmlspecialchars(trim($_POST['delivery_address_1']));
+                $delivery_address_2 = htmlspecialchars(trim($_POST['delivery_address_2']));
+                $delivery_city = htmlspecialchars(trim($_POST['delivery_city']));
+                $delivery_phone_number = htmlspecialchars(trim($_POST['delivery_phone_number']));
+                $delivery_email = htmlspecialchars(trim($_POST['delivery_email']));
+
                 $sql = "INSERT INTO addresses (user_id, order_id, address_type, first_name, last_name, address_1, address_2, city, phone_number, email)
                         VALUES (?, ?, 'shipping', ?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);

@@ -7,6 +7,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $paypalClientId = $_ENV['PAYPAL_CLIENT_ID'];
+
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +48,7 @@ $paypalClientId = $_ENV['PAYPAL_CLIENT_ID'];
         <div class="low-dark"></div>
         <div class="m-bg-outer">
             <div class="m-menu-text">
-                <h1>CART</h1>
+                <h1>CHECKOUT</h1>
                 <div class="breadcrumb">
                     <a href="index.php">Home &gt;</a> &nbsp;&nbsp; <a href="checkout.php">Checkout &gt;</a>
                 </div>

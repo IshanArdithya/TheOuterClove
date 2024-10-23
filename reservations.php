@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-wvw1PZt5STwCrZ6xGq+GSE1a5/Sp5j+oN8t02kGGtWQdIzApkzt+ub7svD3Wt5z1hJS/VRuKhKoAO1t32k8sKw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
+    <script src="https://kit.fontawesome.com/be234dd9e9.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/styles.css">
 
 </head>
@@ -61,14 +61,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- -------------- Background images & texts -------------- -->
 
-    <div class="m-bg-container">
-        <div class="low-dark"></div>
-        <div class="m-bg-outer">
-            <div class="m-menu-text">
-                <h1>Make Reservation</h1>
-                <div class="breadcrumb">
-                    <a href="index.php">Home &gt;</a> &nbsp;&nbsp; <a href="reservations.php">Reservation &gt;</a>
-                </div>
+    <div id="pagetitle" class="pagetitle layout1"
+        style="background-image: url(https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/uploads/2021/03/bg-page-title.jpg);">
+        <div class="page-title-container">
+            <div class="page-title-inner">
+                <h1 class="page-title">Reservation</h1>
+                <ul class="page-title-breadcrumb">
+                    <li>
+                        <a class="breadcrumb-entry fa-solid fa-house" style="color: #fff;"></a>
+                        <a href="http://localhost/TheOuterClove/index.php" class="breadcrumb-entry">Home</a>
+                        <a class="breadcrumb-entry">/</a>
+                        <a href="http://localhost/TheOuterClove/reservations.php" class="breadcrumb-entry">Reservation</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="page-title-icon">
+                <img src="https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/themes/cafenod/assets/images/coffe-icon.png"
+                    alt="Menu">
             </div>
         </div>
     </div>

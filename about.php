@@ -8,7 +8,7 @@
 
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
+    <script src="https://kit.fontawesome.com/be234dd9e9.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/styles.css">
 
 </head>
@@ -23,14 +23,23 @@
 
     <!-- -------------- Background Image & Texts -------------- -->
 
-    <div class="m-bg-container">
-        <div class="low-dark"></div>
-        <div class="m-bg-outer">
-            <div class="m-menu-text">
-                <h1>About</h1>
-                <div class="breadcrumb">
-                    <a href="index.php">Home &gt;</a> &nbsp;&nbsp; <a href="about.html">About &gt;</a>
-                </div>
+    <div id="pagetitle" class="pagetitle layout1"
+        style="background-image: url(https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/uploads/2021/03/bg-page-title.jpg);">
+        <div class="page-title-container">
+            <div class="page-title-inner">
+                <h1 class="page-title">About Us</h1>
+                <ul class="page-title-breadcrumb">
+                    <li>
+                        <a class="breadcrumb-entry fa-solid fa-house" style="color: #fff;"></a>
+                        <a href="http://localhost/TheOuterClove/index.php" class="breadcrumb-entry">Home</a>
+                        <a class="breadcrumb-entry">/</a>
+                        <a href="http://localhost/TheOuterClove/about.php" class="breadcrumb-entry">About</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="page-title-icon">
+                <img src="https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/themes/cafenod/assets/images/coffe-icon.png"
+                    alt="Menu">
             </div>
         </div>
     </div>

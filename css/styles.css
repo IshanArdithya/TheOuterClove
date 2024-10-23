@@ -29,6 +29,7 @@ body {
   /* <----- Custom Colors -----> */
   --main-theme-color: #f38122;
   --default-color: #fff;
+  --main-font-color: #000;
   --pg-main-color1: #f8f9fa;
   --pg-main-color2: #fff;
   --navbar-color: #cfcfcf;
@@ -160,8 +161,7 @@ a {
   background-image: url("../images/bg_1.jpg");
 }
 
-.bg-container,
-.m-bg-container {
+.bg-container {
   font-family: "Bree Serif", serif;
   left: 0;
   top: 0;
@@ -172,48 +172,8 @@ a {
   background-size: cover;
 }
 
-.m-bg-container {
-  height: 450px;
-  background-image: url("../images/menu1.jpg");
-  background-position: center 20%;
-}
-
-.bg-outer,
-.m-bg-outer {
+.bg-outer {
   z-index: 2;
-}
-
-.m-menu-text {
-  position: absolute;
-  font-size: 18px;
-  top: 310px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: left;
-  color: #ffffffdd;
-  text-transform: uppercase;
-}
-
-.m-menu-text h1 {
-  text-align: center;
-}
-
-.breadcrumb {
-  font-size: 12px;
-  color: #ffffffbf;
-  margin-top: 10px;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.breadcrumb a {
-  color: #ffffffbf;
-  text-decoration: none;
-  border-bottom: 2px solid rgba(243, 129, 34, 0.1);
-}
-
-.breadcrumb a:hover {
-  color: var(--main-theme-color);
 }
 
 .intro-text {
@@ -294,6 +254,7 @@ a.bordered-btn:hover {
 .page-title-breadcrumb {
   list-style-type: none;
   color: var(--default-color);
+  line-height: 1;
 }
 
 .breadcrumb-entry {
@@ -301,6 +262,7 @@ a.bordered-btn:hover {
   color: var(--default-color);
   text-decoration: none;
   transition: color 0.2s;
+  margin-right: 5px;
 
 }
 
@@ -358,6 +320,7 @@ a.bordered-btn:hover {
 
 #pagetitle .page-title-icon img {
   max-height: 40px;
+  margin-left: 3px;
 }
 
 #pagetitle .page-title-icon img:hover {
@@ -613,6 +576,9 @@ a.bordered-btn:hover {
   transform: translateX(100%);
 }
 
+#products {
+  font-family: "Bree Serif", serif;
+}
 
 .all-products {
   display: flex;
@@ -676,9 +642,16 @@ a.bordered-btn:hover {
   background-color: var(--button-hover-color);
 }
 
-.product .product-title,
+.product .product-title {
+  color:var(--main-font-color);
+  font-size: 17px;
+  margin-bottom: 10px;
+  line-height: 20px;
+  overflow: hidden;
+}
+
 .product .product-price {
-  font-size: 18px;
+  font-size: 17px;
   height: 40px;
   line-height: 20px;
   overflow: hidden;
@@ -687,7 +660,6 @@ a.bordered-btn:hover {
 .product-description {
   font-size: 14px;
   color: #555;
-  margin-top: 10px;
   margin-bottom: 10px;
   height: 60px;
   overflow: hidden;
@@ -712,6 +684,7 @@ a.bordered-btn:hover {
   color: #ececec;
   display: inline-block;
   text-decoration: none;
+  font-family: "Bree Serif", serif;
   background-color: var(--main-theme-color);
   padding: 1.2rem 3rem;
   border-radius: 1rem;
@@ -1197,6 +1170,10 @@ input[type="radio"]:checked + .feedback-navigation label {
 
 /* ------------------- Contact Info (contact.html) ------------------- */
 
+#contact-section {
+  font-family: "Bree Serif", serif;
+}
+
 .contact-container {
   display: flex;
   justify-content: space-between;
@@ -1207,6 +1184,7 @@ input[type="radio"]:checked + .feedback-navigation label {
 .contact-form-container h2 {
   /* max-width: 800px; */
   padding-bottom: 3vh;
+  font-family: "Bree Serif", serif;
 }
 
 .contact-form {
@@ -1236,7 +1214,8 @@ input[type="radio"]:checked + .feedback-navigation label {
 .opening-hours p {
   margin: 5px 0;
   color: #000000;
-  font-size: 17px;
+  font-size: 16px;
+  font-weight: 100;
 }
 
 .cform-field {
@@ -1249,6 +1228,7 @@ input[type="radio"]:checked + .feedback-navigation label {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
+  font-family: "Bree Serif", serif;
   outline: none;
   background-color: transparent;
   padding-left: 0;
@@ -1262,7 +1242,7 @@ input[type="radio"]:checked + .feedback-navigation label {
 .cform-field textarea {
   height: 70px;
   resize: none;
-  font-family: "Open Sans", Arial, sans-serif;
+  font-family: "Bree Serif", serif;
 }
 
 .cform-button {
@@ -1272,7 +1252,7 @@ input[type="radio"]:checked + .feedback-navigation label {
   font-weight: bolder;
   padding: 0 30px;
   border: 1px solid rgba(0, 0, 0, 0.598);
-  font-family: "Open Sans", Arial, sans-serif;
+  font-family: "Bree Serif", serif;
   text-transform: uppercase;
 }
 
@@ -1358,6 +1338,7 @@ input[type="radio"]:checked + .feedback-navigation label {
   width: 100%;
   padding: 13px;
   box-sizing: border-box;
+  font-family: "Bree Serif", serif;
   border-radius: 0;
   border: none;
   border: 1px solid #c1c1c1;
@@ -1393,7 +1374,7 @@ input[type="radio"]:checked + .feedback-navigation label {
   padding: 10px 12px;
   resize: none;
   outline: none;
-  font-family: "Open Sans", Arial, sans-serif;
+  font-family: "Bree Serif", serif;
 }
 
 .rform-button {
@@ -1403,8 +1384,9 @@ input[type="radio"]:checked + .feedback-navigation label {
   font-weight: bolder;
   padding: 0 30px;
   border: 1px solid rgba(0, 0, 0, 0.598);
-  font-family: "Open Sans", Arial, sans-serif;
+  font-family: "Bree Serif", serif;
   text-transform: uppercase;
+  transition: color 0.2s;
 }
 
 .rform-button > span {
@@ -1424,6 +1406,7 @@ input[type="radio"]:checked + .feedback-navigation label {
 }
 
 .reservation-description p {
+  font-family: "Bree Serif", serif;
   font-size: 0.9em;
   text-align: left;
 }

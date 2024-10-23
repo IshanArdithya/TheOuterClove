@@ -45,7 +45,7 @@ $conn->close();
                     <li>
                         <a class="breadcrumb-entry fa-solid fa-house" style="color: #fff;"></a>
                         <a href="http://localhost/TheOuterClove/index.php" class="breadcrumb-entry">Home</a>
-                        <a>/</a>
+                        <a class="breadcrumb-entry">/</a>
                         <a href="http://localhost/TheOuterClove/menu.php" class="breadcrumb-entry">Menu</a>
                     </li>
                 </ul>
@@ -65,7 +65,7 @@ $conn->close();
             <h3 class="mini-title">Discover delightful dishes at pocket-friendly prices!</h3>
         </div>
 
-        <section class="products">
+        <section id="products" class="products">
             <div class="menu-tabs">
                 <ul class="tab-list">
                     <li><a href="#" class="tab-item active" data-category="all">All</a></li>

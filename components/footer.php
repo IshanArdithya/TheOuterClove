@@ -43,7 +43,7 @@
             <p>Copyrights &copy; 2024 - <a href="https://github.com/IshanArdithya"><span class="theme-accent-color">Ishan Ardithya</span></a>, All Rights Reserved.</p>
         </div>
 
-        <script>
+        <!-- <script>
             window.onscroll = function() {scrollFunction()};
 
             function scrollFunction() {
@@ -53,6 +53,6 @@
                 document.getElementById("header").style.background = "transparent";
                 }
             }
-        </script>
+        </script> -->
 
     </footer>

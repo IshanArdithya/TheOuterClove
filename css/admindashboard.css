@@ -340,14 +340,16 @@ main .recents table tbody tr:last-child td {
 #addproducts-form label,
 #addproducts-form input,
 #addproducts-form textarea,
-#addproducts-form button {
+#addproducts-form button,
+#addproducts-form select {
   display: block;
   width: 100%;
   margin-bottom: 1rem;
 }
 
 #addproducts-form input,
-#addproducts-form textarea {
+#addproducts-form textarea,
+#addproducts-form select {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;

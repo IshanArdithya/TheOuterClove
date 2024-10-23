@@ -1,6 +1,5 @@
 <?php
 include 'connectdb.php';
-
 session_start();
 
 $cartItems = [];
@@ -23,6 +22,7 @@ $conn->close();
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/be234dd9e9.js" crossorigin="anonymous"></script>
 
 </head>
 
@@ -36,14 +36,23 @@ $conn->close();
 
     <!-- -------------- Background Image & Texts -------------- -->
 
-    <div class="m-bg-container">
-        <div class="low-dark"></div>
-        <div class="m-bg-outer">
-            <div class="m-menu-text">
-                <h1>MENU</h1>
-                <div class="breadcrumb">
-                    <a href="index.php">Home &gt;</a> &nbsp;&nbsp; <a href="menu.php">Menu &gt;</a>
-                </div>
+    <div id="pagetitle" class="pagetitle layout1"
+        style="background-image: url(https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/uploads/2021/03/bg-page-title.jpg);">
+        <div class="page-title-container">
+            <div class="page-title-inner">
+                <h1 class="page-title">Our Menu</h1>
+                <ul class="page-title-breadcrumb">
+                    <li>
+                        <a class="breadcrumb-entry fa-solid fa-house" style="color: #fff;"></a>
+                        <a href="http://localhost/TheOuterClove/index.php" class="breadcrumb-entry">Home</a>
+                        <a>/</a>
+                        <a href="http://localhost/TheOuterClove/menu.php" class="breadcrumb-entry">Menu</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="page-title-icon">
+                <img src="https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/themes/cafenod/assets/images/coffe-icon.png"
+                    alt="Menu">
             </div>
         </div>
     </div>
@@ -57,33 +66,17 @@ $conn->close();
         </div>
 
         <section class="products">
-            <h2>Our Products</h2>
-            <form id="search-form" method="get" class="search-form">
-                <input type="text" name="search" id="search-input" placeholder="Search...">
-            </form>
+            <div class="menu-tabs">
+                <ul class="tab-list">
+                    <li><a href="#" class="tab-item active" data-category="all">All</a></li>
+                    <li><a href="#" class="tab-item" data-category="starters">Starters</a></li>
+                    <li><a href="#" class="tab-item" data-category="desserts">Desserts</a></li>
+                </ul>
+                <div class="tab-indicator"></div>
+            </div>
+
             <div class="all-products" id="products-container">
-                <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        ?>
-                        <div class="product">
-                            <img src="<?php echo $row['image_path']; ?>" alt="<?php echo $row['product_title']; ?>">
-                            <div class="product-info">
-                                <h4 class="product-title"><?php echo $row['product_title']; ?></h4>
-                                <p class="product-description"><?php echo $row['product_description']; ?></p>
-                                <p class="product-price">Rs.<?php echo $row['product_price']; ?></p>
-                                <form id="add-to-cart-form-<?php echo $row['product_id']; ?>" class="add-to-cart-form" method="post">
-                                    <input type="hidden" name="product_id" value="<?php echo $row['product_id']; ?>">
-                                    <button class="product-btn" type="submit" name="add_to_cart">Add to Cart</button>
-                                </form>
-                            </div>
-                        </div>
-                        <?php
-                    }
-                } else {
-                    echo "<p>No products available</p>";
-                }
-                ?>
+                <!-- Products will be loaded here dynamically -->
             </div>
         </section>
     </div>
@@ -101,69 +94,75 @@ $conn->close();
             const closeCartBtn = document.getElementById("close-cart-btn");
             const addToCartForms = document.querySelectorAll(".add-to-cart-form");
 
-            const searchInput = document.getElementById("search-input");
-            const productsContainer = document.getElementById("products-container");
+            loadProducts('all');
 
-            searchInput.addEventListener("input", function () {
-                const searchQuery = searchInput.value;
+            document.querySelectorAll('.tab-item').forEach(item => {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    loadProducts(category);
 
-                fetch('ajax/search_products.php?search=' + encodeURIComponent(searchQuery))
-                    .then(response => response.text())
-                    .then(data => {
-                        productsContainer.innerHTML = data;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching search results:', error);
+                    document.querySelectorAll('.tab-item').forEach(tab => {
+                        tab.classList.remove('active');
                     });
-            });
-
-
-            addToCartForms.forEach(function (form) {
-                form.addEventListener("submit", function (event) {
-                    event.preventDefault();
-
-                    const formData = new FormData(this);
-
-                    fetch('ajax/add_to_cart.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-
-                                localStorage.setItem('cartUpdated', Date.now());
-
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 1500,
-                                    timerProgressBar: true
-                                });
-                                Toast.fire({
-                                    icon: "success",
-                                    title: "Added to Cart"
-                                });
-
-                                updateCartItems();
-                            }
-                        })
-                        .catch(error => {
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: "top-end",
-                                showConfirmButton: false,
-                                timer: 1500,
-                                timerProgressBar: true
-                            });
-                            Toast.fire({
-                                icon: "error",
-                                title: "Error adding to cart"
-                            });
-                        });
+                    this.classList.add('active');
                 });
             });
+
+            function loadProducts(category) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'ajax/fetch_products.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function () {
+                    if (this.status === 200) {
+                        document.getElementById('products-container').innerHTML = this.responseText;
+                        attachAddToCartListeners();
+                    }
+                };
+                xhr.send('category=' + category);
+            }
+
+            function attachAddToCartListeners() {
+                const addToCartForms = document.querySelectorAll(".add-to-cart-form");
+
+                addToCartForms.forEach(function (form) {
+                    form.addEventListener("submit", function (event) {
+                        event.preventDefault();
+
+                        const formData = new FormData(this);
+
+                        fetch('ajax/add_to_cart.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    localStorage.setItem('cartUpdated', Date.now());
+                                    showToast("success", "Added to Cart");
+                                    updateCartItems();
+                                }
+                            })
+                            .catch(error => {
+                                showToast("error", "Error adding to cart");
+                            });
+                    });
+                });
+            }
+
+            function showToast(icon, title) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true
+                });
+                Toast.fire({
+                    icon: icon,
+                    title: title
+                });
+            }
 
             function updateCartItems() {
                 fetch('ajax/fetch_cart.php')
@@ -278,7 +277,6 @@ $conn->close();
                 });
             }
 
-
             cartIcon.addEventListener("click", function (event) {
                 event.stopPropagation();
                 if (shoppingCart.style.display === "block") {
@@ -307,6 +305,8 @@ $conn->close();
             });
         });
     </script>
+
+    <script src="js/menu-page/tab-list-position.js"></script>
 
 </body>
 

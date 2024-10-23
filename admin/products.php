@@ -116,6 +116,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
                             <input type="text" id="addproduct_title" name="product_title" minlength="3" maxlength="35"
                                 required>
 
+                            <label for="product_category">Product Category:</label>
+                            <select id="product_category" name="product_category" required>
+                                <option value="" disabled selected>Select</option>
+                                <option value="starters">Starters</option>
+                                <option value="desserts">Desserts</option>
+                            </select>
+
                             <label for="addproduct_description">Product Description:</label>
                             <textarea id="addproduct_description" name="product_description" minlength="5"
                                 maxlength="75" required></textarea>
@@ -228,6 +235,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
     if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addproduct_submit'])) {
 
         $productTitle = $_POST['product_title'];
+        $productCategory = $_POST['product_category'];
         $productDescription = $_POST['product_description'];
         $productPrice = $_POST['product_price'];
 
@@ -238,8 +246,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET['action']) && $_GET['act
         $targetFilePath = $targetDir . basename($_FILES["product_image"]["name"]);
         move_uploaded_file($_FILES["product_image"]["tmp_name"], $targetFile);
 
-        $sql = "INSERT INTO products (product_title, product_description, product_price, image_path)
-            VALUES ('$productTitle', '$productDescription', '$productPrice', '$targetFilePath')";
+        $sql = "INSERT INTO products (product_title, product_category, product_description, product_price, image_path)
+            VALUES ('$productTitle', '$productCategory', '$productDescription', '$productPrice', '$targetFilePath')";
 
         if ($conn->query($sql) === TRUE) {
             echo "<script>

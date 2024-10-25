@@ -59,7 +59,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include 'components/header.php'
         ?>
 
+    <!-- -------------- Scroll to Top -------------- -->
+
+    <button id="scrollToTop" class="scroll-to-top">
+        <i class="fas fa-angle-up"></i>
+    </button>
+
     <!-- -------------- Background images & texts -------------- -->
+
 
     <div id="pagetitle" class="pagetitle layout1"
         style="background-image: url(https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/uploads/2021/03/bg-page-title.jpg);">
@@ -71,82 +78,84 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <a class="breadcrumb-entry fa-solid fa-house" style="color: #fff;"></a>
                         <a href="http://localhost/TheOuterClove/index.php" class="breadcrumb-entry">Home</a>
                         <a class="breadcrumb-entry">/</a>
-                        <a href="http://localhost/TheOuterClove/reservations.php" class="breadcrumb-entry">Reservation</a>
+                        <a href="http://localhost/TheOuterClove/reservations.php"
+                            class="breadcrumb-entry">Reservation</a>
                     </li>
                 </ul>
             </div>
             <div class="page-title-icon">
-                <img src="https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/themes/cafenod/assets/images/coffe-icon.png"
-                    alt="Menu">
+                <img src="images/assets/booking.png" alt="Menu">
             </div>
         </div>
     </div>
 
     <!-- -------------- Reservation Form -------------- -->
 
-    <div class="main-color1">
-        <div class="reservation-form-container">
-            <h2>BOOK A TABLE</h2>
-            <form class="reservation-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <div id="first-section">
+        <div class="main-color1">
+            <div class="reservation-form-container">
+                <h2>BOOK A TABLE</h2>
+                <form class="reservation-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 
-                <div class="rform-row">
-                    <div class="rform-field">
-                        <input type="text" id="rname" name="rname" placeholder="Your Name" maxlength="100" required
-                            <?php echo $readonly; ?>>
+                    <div class="rform-row">
+                        <div class="rform-field">
+                            <input type="text" id="rname" name="rname" placeholder="Your Name" maxlength="100" required
+                                <?php echo $readonly; ?>>
+                        </div>
+                        <div class="rform-field">
+                            <input type="email" id="remail" name="remail" placeholder="Your Email" maxlength="350"
+                                required <?php echo $readonly; ?>>
+                        </div>
                     </div>
-                    <div class="rform-field">
-                        <input type="email" id="remail" name="remail" placeholder="Your Email" maxlength="350" required
-                            <?php echo $readonly; ?>>
-                    </div>
-                </div>
 
-                <div class="rform-row">
-                    <div class="rform-field">
-                        <input type="tel" id="rphone" name="rphone" placeholder="Your Phone" maxlength="12" required
-                            <?php echo $readonly; ?>>
+                    <div class="rform-row">
+                        <div class="rform-field">
+                            <input type="tel" id="rphone" name="rphone" placeholder="Your Phone" maxlength="12" required
+                                <?php echo $readonly; ?>>
+                        </div>
+                        <div class="rform-field">
+                            <select id="rpeople" name="rpeople" required <?php echo $selectDisabled; ?>>
+                                <option value="" disabled selected>No. Of Persons</option>
+                                <option value="1">1 Person</option>
+                                <option value="2">2 Persons</option>
+                                <option value="3">3 Persons</option>
+                                <option value="4">4 Persons</option>
+                                <option value="4+">4+ Persons</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="rform-field">
-                        <select id="rpeople" name="rpeople" required <?php echo $selectDisabled; ?>>
-                            <option value="" disabled selected>No. Of Persons</option>
-                            <option value="1">1 Person</option>
-                            <option value="2">2 Persons</option>
-                            <option value="3">3 Persons</option>
-                            <option value="4">4 Persons</option>
-                            <option value="4+">4+ Persons</option>
-                        </select>
+
+                    <div class="rform-row">
+                        <div class="rform-field">
+                            <select id="rpreferences" name="rpreferences" required <?php echo $selectDisabled; ?>>
+                                <option value="" disabled selected>Dietary Preferences</option>
+                                <option value="None">None</option>
+                                <option value="Vegetarian">Vegetarian</option>
+                                <option value="Vegan">Vegan</option>
+                            </select>
+                        </div>
+                        <div class="rform-field">
+                            <input type="date" id="rdate" name="rdate" placeholder="Date" required <?php echo $readonly; ?>>
+                            <span></span>
+                            <input type="time" id="rtime" name="rtime" placeholder="Time" required <?php echo $readonly; ?>>
+                        </div>
                     </div>
-                </div>
 
-                <div class="rform-row">
-                    <div class="rform-field">
-                        <select id="rpreferences" name="rpreferences" required <?php echo $selectDisabled; ?>>
-                            <option value="" disabled selected>Dietary Preferences</option>
-                            <option value="None">None</option>
-                            <option value="Vegetarian">Vegetarian</option>
-                            <option value="Vegan">Vegan</option>
-                        </select>
+                    <div class="rform-row">
+                        <textarea id="rdescription" name="rdescription" placeholder="Message" maxlength="1000" <?php echo $readonly; ?>></textarea>
                     </div>
-                    <div class="rform-field">
-                        <input type="date" id="rdate" name="rdate" placeholder="Date" required <?php echo $readonly; ?>>
-                        <span></span>
-                        <input type="time" id="rtime" name="rtime" placeholder="Time" required <?php echo $readonly; ?>>
+
+                    <button type="submit" class="rform-button" <?php echo $buttonDisabled; ?>><span></span>
+                        <?php echo $buttonText; ?></button>
+
+                    <div class="reservation-description">
+                        <p>* Kindly book your table at least 24 hours before your desired reservation time.</p>
+                        <p>* Your reservation will be either accepted or denied by us. You can check it by logging in to
+                            your account.</p>
+                        <p>* You'll be contacted by our staff, If the reservation is accepted.</p>
                     </div>
-                </div>
-
-                <div class="rform-row">
-                    <textarea id="rdescription" name="rdescription" placeholder="Description" maxlength="1000" <?php echo $readonly; ?>></textarea>
-                </div>
-
-                <button type="submit" class="rform-button" <?php echo $buttonDisabled; ?>><span></span>
-                    <?php echo $buttonText; ?></button>
-
-                <div class="reservation-description">
-                    <p>* Kindly book your table at least 24 hours before your desired reservation time.</p>
-                    <p>* Your reservation will be either accepted or denied by us. You can check it by logging in to
-                        your account.</p>
-                    <p>* You'll be contacted by our staff, If the reservation is accepted.</p>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -155,6 +164,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php
     include 'components/footer.php';
     ?>
+
+    <script src="js/header.js"></script>
+    <script src="js/scroll-to-top.js"></script>
 </body>
 
 </html>

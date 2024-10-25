@@ -34,6 +34,12 @@ $conn->close();
     include 'components/header.php';
     ?>
 
+    <!-- -------------- Scroll to Top -------------- -->
+
+    <button id="scrollToTop" class="scroll-to-top">
+        <i class="fas fa-angle-up"></i>
+    </button>
+
     <!-- -------------- Background Image & Texts -------------- -->
 
     <div id="pagetitle" class="pagetitle layout1"
@@ -51,34 +57,35 @@ $conn->close();
                 </ul>
             </div>
             <div class="page-title-icon">
-                <img src="https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/themes/cafenod/assets/images/coffe-icon.png"
-                    alt="Menu">
+                <img src="images/assets/food-plate.png" alt="Menu">
             </div>
         </div>
     </div>
 
     <!-- -------------- Menu Cards -------------- -->
 
-    <div id="menu" class="main-color1">
-        <div class="heading-wrap">
-            <h2 class="block-title">CHECK OUT WHAT'S <span class="theme-accent-color">COOKIN'</span></h2>
-            <h3 class="mini-title">Discover delightful dishes at pocket-friendly prices!</h3>
+    <div id="first-section">
+        <div id="menu" class="main-color1">
+            <div class="heading-wrap">
+                <h2 class="block-title">CHECK OUT WHAT'S <span class="theme-accent-color">COOKIN'</span></h2>
+                <h3 class="mini-title">Discover delightful dishes at pocket-friendly prices!</h3>
+            </div>
+
+            <section id="products" class="products">
+                <div class="menu-tabs">
+                    <ul class="tab-list">
+                        <li><a href="#" class="tab-item active" data-category="all">All</a></li>
+                        <li><a href="#" class="tab-item" data-category="starters">Starters</a></li>
+                        <li><a href="#" class="tab-item" data-category="desserts">Desserts</a></li>
+                    </ul>
+                    <div class="tab-indicator"></div>
+                </div>
+
+                <div class="all-products" id="products-container">
+                    <!-- Products will be loaded here dynamically -->
+                </div>
+            </section>
         </div>
-
-        <section id="products" class="products">
-            <div class="menu-tabs">
-                <ul class="tab-list">
-                    <li><a href="#" class="tab-item active" data-category="all">All</a></li>
-                    <li><a href="#" class="tab-item" data-category="starters">Starters</a></li>
-                    <li><a href="#" class="tab-item" data-category="desserts">Desserts</a></li>
-                </ul>
-                <div class="tab-indicator"></div>
-            </div>
-
-            <div class="all-products" id="products-container">
-                <!-- Products will be loaded here dynamically -->
-            </div>
-        </section>
     </div>
 
     <!-- -------------- Footer -------------- -->
@@ -307,6 +314,8 @@ $conn->close();
     </script>
 
     <script src="js/menu-page/tab-list-position.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/scroll-to-top.js"></script>
 
 </body>
 

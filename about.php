@@ -21,6 +21,12 @@
     include 'components/header.php'
         ?>
 
+    <!-- -------------- Scroll to Top -------------- -->
+
+    <button id="scrollToTop" class="scroll-to-top">
+        <i class="fas fa-angle-up"></i>
+    </button>
+
     <!-- -------------- Background Image & Texts -------------- -->
 
     <div id="pagetitle" class="pagetitle layout1"
@@ -38,54 +44,61 @@
                 </ul>
             </div>
             <div class="page-title-icon">
-                <img src="https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/themes/cafenod/assets/images/coffe-icon.png"
-                    alt="Menu">
+                <img src="images/assets/restaurant.png" alt="Menu">
             </div>
         </div>
     </div>
 
     <!-- -------------- About -------------- -->
 
-    <div id="about" class="main-color1">
-        <p>Welcome to The Outer Clove Restaurant, where the love for good food and warm hospitality has been our recipe
-            for success since 2002. We believe in serving not just meals, but experiences that remains in your memory.
-        </p>
+    <div id="first-section">
+        <div id="about" class="main-color1">
+            <p>Welcome to The Outer Clove Restaurant, where the love for good food and warm hospitality has been our
+                recipe
+                for success since 2002. We believe in serving not just meals, but experiences that remains in your
+                memory.
+            </p>
 
-        <p>As you step into The Outer Clove, prepare to taste the heart and soul we put into every dish. Our team is
-            dedicated to creating an atmosphere where you feel at home, surrounded by friendly faces and the aroma of
-            delicious flavors.</p>
+            <p>As you step into The Outer Clove, prepare to taste the heart and soul we put into every dish. Our team is
+                dedicated to creating an atmosphere where you feel at home, surrounded by friendly faces and the aroma
+                of
+                delicious flavors.</p>
 
-        <p>Our journey began in 2002, and we've been proudly serving communities ever since. From the start, we aimed to
-            provide more than just a meal. we wanted to be a part of your memories.</p>
+            <p>Our journey began in 2002, and we've been proudly serving communities ever since. From the start, we
+                aimed to
+                provide more than just a meal. we wanted to be a part of your memories.</p>
 
-        <p>Originally a small restaurant, we've grown over the years, becoming a beloved spot for locals and visitors
-            alike. Our commitment to quality and passion for great food has made The Outer Clove a go-to place for those
-            seeking a delightful dining experience.</p>
+            <p>Originally a small restaurant, we've grown over the years, becoming a beloved spot for locals and
+                visitors
+                alike. Our commitment to quality and passion for great food has made The Outer Clove a go-to place for
+                those
+                seeking a delightful dining experience.</p>
 
-        <p>Join us at The Outer Clove, where the simplicity of good food meets the warmth of hospitality. We look
-            forward to creating memorable moments with you.</p>
+            <p>Join us at The Outer Clove, where the simplicity of good food meets the warmth of hospitality. We look
+                forward to creating memorable moments with you.</p>
 
-        <p>The Outer Clove Team ~</p>
+            <p>The Outer Clove Team ~</p>
 
-        <div class="statistics-container">
-            <div class="statistic">
-                <div class="statistic-title">10</div>
-                <div class="statistic-text">Years of Experience</div>
-            </div>
+            <div class="statistics-container">
+                <div class="statistic">
+                    <div class="statistic-title">10</div>
+                    <div class="statistic-text">Years of Experience</div>
+                </div>
 
-            <div class="statistic">
-                <div class="statistic-title">100</div>
-                <div class="statistic-text">Tasty Dishes</div>
-            </div>
+                <div class="statistic">
+                    <div class="statistic-title">100</div>
+                    <div class="statistic-text">Tasty Dishes</div>
+                </div>
 
-            <div class="statistic">
-                <div class="statistic-title">50</div>
-                <div class="statistic-text">Staff</div>
-            </div>
+                <div class="statistic">
+                    <div class="statistic-title">50</div>
+                    <div class="statistic-text">Staff</div>
+                </div>
 
-            <div class="statistic">
-                <div class="statistic-title">12,000</div>
-                <div class="statistic-text">Happy Customers</div>
+                <div class="statistic">
+                    <div class="statistic-title">12,000</div>
+                    <div class="statistic-text">Happy Customers</div>
+                </div>
             </div>
         </div>
     </div>
@@ -95,6 +108,9 @@
     <?php
     include 'components/footer.php';
     ?>
+
+    <script src="js/header.js"></script>
+    <script src="js/scroll-to-top.js"></script>
 
 </body>
 

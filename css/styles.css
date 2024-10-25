@@ -39,6 +39,8 @@ body {
   --about-color: #a56027c8;
   --form-placeholder-color: #969696;
   --error-color: #e90000;
+
+  --text-color1: #0f0f0f;
 }
 
 a {
@@ -1348,16 +1350,78 @@ input[type="radio"]:checked + .feedback-navigation label {
 
 /* ------------------- About (about.html) ------------------- */
 
-#about p {
-  text-align: center;
-  max-width: 70rem;
-  margin: 0 auto 1rem;
-  line-height: 1.5;
-  color: var(--about-color);
-  font-family: "Open Sans", Arial, sans-serif;
-  font-family: "Bree Serif", serif;
+.about-whyus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 4rem;
+  background-color: #f5f5f5;
+}
+
+.about-whyus h2 {
   text-transform: uppercase;
 }
+
+.whyus-image {
+  width: 30%; /* 4:5 ratio */
+  aspect-ratio: 5 / 5;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.whyus-content {
+  width: 55%;
+}
+
+.whyus-title {
+  position: relative;
+  font-family: "Bree Serif", serif;
+  text-align: left;
+  display: inline-block;
+  letter-spacing: 3px;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-color1);
+  margin-bottom: 2.5rem;
+}
+
+.title-line {
+  position: relative;
+}
+
+.whyus-title::after {
+  width: 15%;
+  height: 3px;
+  background: var(--main-theme-color);
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+}
+
+.whyus-description {
+  font-family: "Bree Serif", serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  text-align: justify !important;
+}
+
+@media (max-width: 768px) {
+  .about-whyus {
+    flex-direction: column;
+    padding: 2rem;
+  }
+
+  .whyus-image, .whyus-content {
+    width: 100%;
+  }
+}
+
 
 .statistics-container {
   display: flex;

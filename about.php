@@ -53,51 +53,50 @@
 
     <div id="first-section">
         <div id="about" class="main-color1">
-            <p>Welcome to The Outer Clove Restaurant, where the love for good food and warm hospitality has been our
-                recipe
-                for success since 2002. We believe in serving not just meals, but experiences that remains in your
-                memory.
-            </p>
-
-            <p>As you step into The Outer Clove, prepare to taste the heart and soul we put into every dish. Our team is
-                dedicated to creating an atmosphere where you feel at home, surrounded by friendly faces and the aroma
-                of
-                delicious flavors.</p>
-
-            <p>Our journey began in 2002, and we've been proudly serving communities ever since. From the start, we
-                aimed to
-                provide more than just a meal. we wanted to be a part of your memories.</p>
-
-            <p>Originally a small restaurant, we've grown over the years, becoming a beloved spot for locals and
-                visitors
-                alike. Our commitment to quality and passion for great food has made The Outer Clove a go-to place for
-                those
-                seeking a delightful dining experience.</p>
-
-            <p>Join us at The Outer Clove, where the simplicity of good food meets the warmth of hospitality. We look
-                forward to creating memorable moments with you.</p>
-
-            <p>The Outer Clove Team ~</p>
-
-            <div class="statistics-container">
-                <div class="statistic">
-                    <div class="statistic-title">10</div>
-                    <div class="statistic-text">Years of Experience</div>
+            <div class="main-container">
+                <div class="about-whyus">
+                    <img src="https://placehold.co/500x500" alt="Our Unique Dining Experience" class="whyus-image">
+                    <div class="whyus-content">
+                        <h2 class="whyus-title">Why Outer Clove?</h2>
+                        <p class="whyus-description">
+                            At The Outer Clove, we blend Sri Lankan tradition and innovation to bring you a truly unique
+                            dining experience. Drawing on the rich culture and landscapes of Sri Lanka, our dishes are
+                            crafted from the freshest local ingredients, sourced seasonally from nearby farms and
+                            coastlines.
+                            <br>
+                            Our goal is to offer more than a meal—we want to transport you to the warmth of a Sri Lankan
+                            home, where every dish celebrates taste, history, and togetherness. From the bold spices of
+                            our signature curries to the refreshing simplicity of coconut-infused flavors, we honor
+                            tradition with a modern twist.
+                            <br>
+                            Step into a space inspired by the elegance of an old-world Sri Lankan manor, where colonial
+                            charm meets modern sophistication. Each visit is an invitation to relax, savor, and feel at
+                            home. Thank you for joining us on this journey to share the vibrant flavors of Sri Lanka,
+                            one dish at a time.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="statistic">
-                    <div class="statistic-title">100</div>
-                    <div class="statistic-text">Tasty Dishes</div>
-                </div>
+                <div class="statistics-container">
+                    <div class="statistic">
+                        <div class="statistic-title">10</div>
+                        <div class="statistic-text">Years of Experience</div>
+                    </div>
 
-                <div class="statistic">
-                    <div class="statistic-title">50</div>
-                    <div class="statistic-text">Staff</div>
-                </div>
+                    <div class="statistic">
+                        <div class="statistic-title">100</div>
+                        <div class="statistic-text">Tasty Dishes</div>
+                    </div>
 
-                <div class="statistic">
-                    <div class="statistic-title">12,000</div>
-                    <div class="statistic-text">Happy Customers</div>
+                    <div class="statistic">
+                        <div class="statistic-title">50</div>
+                        <div class="statistic-text">Staff</div>
+                    </div>
+
+                    <div class="statistic">
+                        <div class="statistic-title">12,000</div>
+                        <div class="statistic-text">Happy Customers</div>
+                    </div>
                 </div>
             </div>
         </div>

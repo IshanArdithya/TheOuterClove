@@ -40,83 +40,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 $conn->close();
 ?>
 
-
-
 <!DOCTYPE html>
-<html lang="en">
+   <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Outer Clover Restaurant</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="">
+      <link rel="stylesheet" href="../css/admindashboard.css">
 
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+      <title>Staff Login</title>
+   </head>
+   <body>
+      <div class="login">
+         <img src="assets/img/login-bg.png" alt="image" class="login__bg">
 
-    <link rel="stylesheet" href="../css/styles.css">
+         <form method="post" class="login__form">
+            <h1 class="login__title">Login</h1>
 
-</head>
+            <div class="login__inputs">
+               <div class="login__box">
+                  <input type="email" name="email" placeholder="Email ID" required class="login__input">
+                  <i class="ri-mail-fill"></i>
+               </div>
 
-<body>
-
-    <!-- -------------- Navigation Bar -------------- -->
-
-    <header class="header">
-        <a class="navbar-logo" href="index.php">The Outer <span class="theme-accent-color">Clove</span></a>
-
-        <nav class="navbar">
-            <a href="index.php">Home</a>
-            <a href="menu.php">Menu</a>
-            <a href="index.php#gallery">Gallery</a>
-            <a href="reservations.php">Reservation</a>
-            <a href="about.html">About</a>
-            <a href="contact.php">Contact Us</a>
-        </nav>
-
-        <div class="icons">
-            <div class="icons hideit">
-                <a href="p1.html" class="material-symbols-outlined">search</a>
+               <div class="login__box">
+                  <input type="password" name="password" placeholder="Password" required class="login__input">
+                  <i class="ri-lock-2-fill"></i>
+               </div>
             </div>
 
-            <div class="icons">
-                <a href="p2.html" class="material-symbols-outlined">shopping_cart</a>
+            <div class="login__check">
+               <div class="login__check-box">
+                  <input type="checkbox" class="login__check-input" id="user-check">
+                  <label for="user-check" class="login__check-label">Remember me</label>
+               </div>
+
+               <a href="#" class="login__forgot">Forgot Password?</a>
             </div>
 
-            <div class="icons" id="account-icon">
-                <a class="material-symbols-outlined active">account_circle</a>
+            <button type="submit" name="login" class="login__button">Login</button>
+
+            <div class="login__register">
+               Don't have an account? <a href="#">Register</a>
             </div>
-        </div>
-    </header>
-
-    <div class="login-container">
-        <div class="form-box" id="login-box">
-            <h1>Sign In</h1>
-            <form method="post">
-                <div class="input-field">
-                    <i class="material-symbols-outlined">mail</i>
-                    <input type="email" name="email" placeholder="Email" required>
-                </div>
-                <div class="input-field">
-                    <i class="material-symbols-outlined">lock</i>
-                    <input type="password" name="password" placeholder="Password" required>
-                </div>
-                <p><a href="#">Forgot password?</a></p>
-
-                <!-- using this to show wrong email/pw error message -->
-                <?php
-                if (isset($errorlogin)) {
-                    echo '<p class="loginerror">' . $errorlogin . '</p>';
-                }
-                ?>
-
-                <button type="submit" name="login">Sign In</button>
-            </form>
-
-            <p class="l-option">Don't have an account? <a href="#" id="signup-btn">Sign Up</a></p>
-        </div>
-
-    </div>
-
-</body>
-
+         </form>
+      </div>
+   </body>
 </html>

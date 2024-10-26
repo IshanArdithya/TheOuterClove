@@ -20,6 +20,10 @@
             <a href="p1.html" class="material-symbols-outlined navbar-a">search</a>
         </div>
 
+        <div class="icons hideit" id="account-icon">
+            <a href="login.php" class="material-symbols-outlined navbar-a">account_circle</a>
+        </div>
+        
         <div class="icons <?php echo (basename($_SERVER['PHP_SELF']) !== 'menu.php') ? 'hideit' : ''; ?>"
             id="shopping-icon">
             <a class="material-symbols-outlined navbar-a">shopping_cart</a>
@@ -39,10 +43,6 @@
                     <a href="checkout.php" class="popup-checkout-btn navbar-a">Checkout</a>
                 </div>
             </div>
-        </div>
-
-        <div class="icons" id="account-icon">
-            <a href="login.php" class="material-symbols-outlined navbar-a">account_circle</a>
         </div>
     </div>
 

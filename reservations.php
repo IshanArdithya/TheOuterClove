@@ -76,9 +76,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <ul class="page-title-breadcrumb">
                     <li>
                         <a class="breadcrumb-entry fa-solid fa-house" style="color: #fff;"></a>
-                        <a href="http://localhost/TheOuterClove/index.php" class="breadcrumb-entry">Home</a>
+                        <a href="index.php" class="breadcrumb-entry">Home</a>
                         <a class="breadcrumb-entry">/</a>
-                        <a href="http://localhost/TheOuterClove/reservations.php"
+                        <a href="reservations.php"
                             class="breadcrumb-entry">Reservation</a>
                     </li>
                 </ul>

@@ -436,7 +436,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
 
     <script src="js/index-page/no-offers.js"></script>
-    <script src="js/index-page/fade-in.js"></script>
+    <script src="js/fade-in.js"></script>
     <script src="js/index-page/gallery-load.js"></script>
     <script src="js/index-page/bg-image.js"></script>
     <script src="js/header.js"></script>

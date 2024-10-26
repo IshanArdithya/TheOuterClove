@@ -44,14 +44,22 @@ $paypalClientId = $_ENV['PAYPAL_CLIENT_ID'];
 
     <!-- -------------- Background Image & Texts -------------- -->
 
-    <div class="m-bg-container">
-        <div class="low-dark"></div>
-        <div class="m-bg-outer">
-            <div class="m-menu-text">
-                <h1>CHECKOUT</h1>
-                <div class="breadcrumb">
-                    <a href="index.php">Home &gt;</a> &nbsp;&nbsp; <a href="checkout.php">Checkout &gt;</a>
-                </div>
+    <div id="pagetitle" class="pagetitle layout1"
+        style="background-image: url(https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/uploads/2021/03/bg-page-title.jpg);">
+        <div class="page-title-container">
+            <div class="page-title-inner">
+                <h1 class="page-title">Checkout</h1>
+                <ul class="page-title-breadcrumb">
+                    <li>
+                        <a class="breadcrumb-entry fa-solid fa-house" style="color: #fff;"></a>
+                        <a href="index.php" class="breadcrumb-entry">Home</a>
+                        <a class="breadcrumb-entry">/</a>
+                        <a href="checkout.php" class="breadcrumb-entry">Checkout</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="page-title-icon">
+                <img src="images/assets/checkout.png" alt="Menu">
             </div>
         </div>
     </div>
@@ -293,7 +301,7 @@ $paypalClientId = $_ENV['PAYPAL_CLIENT_ID'];
                                     onclick="selectPaymentMethod('visa')">
                                     <div class="checkout-page-payment-row">
                                         <div class="checkout-page-payment-card">
-                                            <p>Visa</p>
+                                            <p>Visa ~ Not Implemented</p>
                                         </div>
                                         <div class="checkout-page-payment-images">
                                             <img src="images/assets/accepted-payment-methods/visa.svg" alt="Visa"

@@ -34,14 +34,22 @@ session_start();
 
     <!-- -------------- Background Image & Texts -------------- -->
 
-    <div class="m-bg-container">
-        <div class="low-dark"></div>
-        <div class="m-bg-outer">
-            <div class="m-menu-text">
-                <h1>CART</h1>
-                <div class="breadcrumb">
-                    <a href="index.php">Home &gt;</a> &nbsp;&nbsp; <a href="cart.php">Cart &gt;</a>
-                </div>
+    <div id="pagetitle" class="pagetitle layout1"
+        style="background-image: url(https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/uploads/2021/03/bg-page-title.jpg);">
+        <div class="page-title-container">
+            <div class="page-title-inner">
+                <h1 class="page-title">Cart</h1>
+                <ul class="page-title-breadcrumb">
+                    <li>
+                        <a class="breadcrumb-entry fa-solid fa-house" style="color: #fff;"></a>
+                        <a href="index.php" class="breadcrumb-entry">Home</a>
+                        <a class="breadcrumb-entry">/</a>
+                        <a href="cart.php" class="breadcrumb-entry">Cart</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="page-title-icon">
+                <img src="images/assets/cart.png" alt="Menu">
             </div>
         </div>
     </div>

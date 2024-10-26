@@ -37,9 +37,9 @@
                 <ul class="page-title-breadcrumb">
                     <li>
                         <a class="breadcrumb-entry fa-solid fa-house" style="color: #fff;"></a>
-                        <a href="http://localhost/TheOuterClove/index.php" class="breadcrumb-entry">Home</a>
+                        <a href="index.php" class="breadcrumb-entry">Home</a>
                         <a class="breadcrumb-entry">/</a>
-                        <a href="http://localhost/TheOuterClove/about.php" class="breadcrumb-entry">About</a>
+                        <a href="about.php" class="breadcrumb-entry">About</a>
                     </li>
                 </ul>
             </div>
@@ -51,11 +51,11 @@
 
     <!-- -------------- About -------------- -->
 
-    <div id="first-section">
-        <div id="about" class="main-color1">
+    <div id="first-section" class="about-section">
+        <div id="about" class="main-color2 scroll">
             <div class="main-container">
                 <div class="about-whyus">
-                    <img src="https://placehold.co/500x500" alt="Our Unique Dining Experience" class="whyus-image">
+                    <img src="images/gallery/restaurant.jpg" alt="Our Unique Dining Experience" class="whyus-image">
                     <div class="whyus-content">
                         <h2 class="whyus-title">Why Outer Clove?</h2>
                         <p class="whyus-description">
@@ -76,26 +76,67 @@
                         </p>
                     </div>
                 </div>
-
-                <div class="statistics-container">
+            </div>
+        </div>
+        <div id="about" class="main-color2 scroll">
+            <div class="main-container">
+                <div class="about-features">
+                    <div class="about-feature-item">
+                        <div class="about-icon-container">
+                            <i class="fas fa-coffee"></i>
+                        </div>
+                        <h3 class="about-feature-title">EXQUISITE FLAVORS</h3>
+                        <p class="about-feature-description">Savor the rich and diverse flavors of our signature dishes,
+                            crafted from fresh, locally sourced ingredients</p>
+                    </div>
+                    <div class="about-feature-item">
+                        <div class="about-icon-container">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 class="about-feature-title">UNCOMPROMISING QUALITY</h3>
+                        <p class="about-feature-description">We take pride in our commitment to quality, ensuring each
+                            dish is made with the finest ingredients for an unforgettable dining experience</p>
+                    </div>
+                    <div class="about-feature-item">
+                        <div class="about-icon-container">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3 class="about-feature-title">NATURAL GOODNESS</h3>
+                        <p class="about-feature-description">Our menu features wholesome options, celebrating the
+                            natural flavors and health benefits of fresh, seasonal produce</p>
+                    </div>
+                    <div class="about-feature-item">
+                        <div class="about-icon-container">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h3 class="about-feature-title">MASTERFUL PREPARATION</h3>
+                        <p class="about-feature-description">Experience the art of cooking with our skilled chefs, who
+                            expertly prepare each dish to perfection, enhancing every flavor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="about" class="main-color2 scroll">
+            <div class="main-container">
+                <div class="statistics-container" id="statistics">
                     <div class="statistic">
-                        <div class="statistic-title">10</div>
+                        <div class="statistic-title" data-count="10">0</div>
                         <div class="statistic-text">Years of Experience</div>
                     </div>
 
                     <div class="statistic">
-                        <div class="statistic-title">100</div>
-                        <div class="statistic-text">Tasty Dishes</div>
+                        <div class="statistic-title" data-count="50">0</div>
+                        <div class="statistic-text">Dishes</div>
                     </div>
 
                     <div class="statistic">
-                        <div class="statistic-title">50</div>
-                        <div class="statistic-text">Staff</div>
+                        <div class="statistic-title" data-count="5000">0</div>
+                        <div class="statistic-text">Orders</div>
                     </div>
 
                     <div class="statistic">
-                        <div class="statistic-title">12,000</div>
-                        <div class="statistic-text">Happy Customers</div>
+                        <div class="statistic-title" data-count="5000">0</div>
+                        <div class="statistic-text">Customers</div>
                     </div>
                 </div>
             </div>
@@ -110,6 +151,8 @@
 
     <script src="js/header.js"></script>
     <script src="js/scroll-to-top.js"></script>
+    <script src="js/about-page/statistic-count.js"></script>
+    <script src="js/fade-in.js"></script>
 
 </body>
 

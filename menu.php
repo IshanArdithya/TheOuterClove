@@ -50,9 +50,9 @@ $conn->close();
                 <ul class="page-title-breadcrumb">
                     <li>
                         <a class="breadcrumb-entry fa-solid fa-house" style="color: #fff;"></a>
-                        <a href="http://localhost/TheOuterClove/index.php" class="breadcrumb-entry">Home</a>
+                        <a href="index.php" class="breadcrumb-entry">Home</a>
                         <a class="breadcrumb-entry">/</a>
-                        <a href="http://localhost/TheOuterClove/menu.php" class="breadcrumb-entry">Menu</a>
+                        <a href="menu.php" class="breadcrumb-entry">Menu</a>
                     </li>
                 </ul>
             </div>

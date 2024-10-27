@@ -19,12 +19,12 @@
             <a href="" class="material-symbols-outlined">search</a>
         </div>
 
-        <div class="icons hideit">
-            <a href="" class="material-symbols-outlined">shopping_cart</a>
-        </div>
-
         <div class="icons" id="account-icon">
             <a href="/TheOuterClove/index.php" class="material-symbols-outlined">home</a>
+        </div>
+        
+        <div class="icons" id="account-icon">
+            <a href="logout.php" class="material-symbols-outlined">logout</a>
         </div>
     </div>
 </header>

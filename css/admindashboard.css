@@ -1,21 +1,3 @@
-/* Imported fonts from local files */
-@font-face {
-  font-family: "Bree Serif";
-  src: url(fonts/Bree_Serif/BreeSerif-Regular.ttf);
-}
-
-@font-face {
-  font-family: "Open Sans";
-  src: url(fonts/Open_Sans/OpenSans-VariableFont_wdth\wght.ttf);
-  font-weight: 300 800;
-}
-
-@font-face {
-  font-family: "Caveat";
-  src: url(fonts/Caveat/Caveat-VariableFont_wght.ttf);
-  font-weight: 400 700;
-}
-
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 
 :root {
@@ -321,6 +303,13 @@ main .recents table tbody tr:last-child td {
   transition: 0.3s;
 }
 
+.btn-danger[disabled] {
+  background-color: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .productimg {
   width: 50px;
   height: 50px;
@@ -382,6 +371,43 @@ main .recents table tbody tr:last-child td {
 
 #addproducts-form button:hover {
   opacity: 90%;
+}
+
+.form-inputs-row-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.form-inputs-row {
+  width: 48%;
+}
+
+.form-inputs-row label,
+.form-inputs-row input {
+  display: block;
+  width: 100%;
+}
+
+.staff-image-preview {
+  width: 30%;
+  padding: 0.5rem;
+  text-align: center;
+  border-radius: 4px;
+  margin-left: 1rem;
+  align-self: center;
+}
+
+.staff-image-preview img {
+  max-width: 100%;
+  max-height: 250px;
+  display: block;
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+.space-between {
+  padding-bottom: 40px;
 }
 
 .image-preview {
@@ -627,43 +653,69 @@ main .recents table tbody tr:last-child td {
   text-decoration: none;
 }
 
-.login img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-
 .login {
-  position: relative;
-  height: 100vh;
-  display: grid;
-  align-items: center;
+    position: relative;
+    height: 100vh;
+    display: grid;
+    align-items: center;
+    overflow: hidden;
 }
 
 .login__bg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+}
+
+.login::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
 }
 
 .login__form {
-  position: relative;
-  margin-inline: 1.5rem;
-  background-color: hsla(0, 0%, 100%, .01);
-  border: 2px solid hsla(0, 0%, 100%, .7);
-  padding: 2.8rem 1.2rem;
-  color: var(--white-color);
-  border-radius: 1rem;
-  backdrop-filter: blur(16px);
+    position: relative;
+    margin-inline: 1.5rem;
+    background-color: hsla(0, 0%, 100%, .01);
+    border: 2px solid hsla(0, 0%, 100%, .7);
+    padding: 2.8rem 1.2rem;
+    color: var(--white-color);
+    border-radius: 1rem;
+    backdrop-filter: blur(16px);
+    z-index: 2;
 }
 
 .login__title {
   text-align: center;
+  display: flex;
+  justify-content: center;
   font-size: var(--h1-font-size);
   margin-bottom: 1.25rem;
+  position: relative;
+}
+
+.cursor {
+  display: inline-block;
+  font-weight: bold;
+  color: var(--white-color);
+  height: 1.5em;
+  opacity: 1;
+}
+
+@keyframes blink {
+  50% {
+      opacity: 0;
+  }
 }
 
 .login__inputs, 
@@ -696,6 +748,13 @@ main .recents table tbody tr:last-child td {
   background: none;
   color: var(--white-color);
   padding-block: 1rem;
+}
+
+.login__input:-webkit-autofill {
+  -webkit-text-fill-color: var(--white-color) !important;
+  transition: background-color 5000s ease-in-out 0s;
+  background-color: transparent !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
 }
 
 .login__input::placeholder {
@@ -747,6 +806,30 @@ main .recents table tbody tr:last-child td {
   cursor: pointer;
 }
 
+@keyframes smoothMoveFadeRight {
+  0% {
+      transform: translateX(0);
+      opacity: 1;
+  }
+  40% {
+      transform: translateX(7px);
+      opacity: 0.8;
+  }
+  70% {
+      transform: translateX(14px);
+      opacity: 0.4;
+  }
+  100% {
+      transform: translateX(19px);
+      opacity: 0;
+  }
+}
+
+.animate-icon {
+  display: inline-block;
+  animation: smoothMoveFadeRight 1.5s linear infinite;
+}
+
 .login__register {
   font-size: var(--small-font-size);
   text-align: center;
@@ -759,6 +842,29 @@ main .recents table tbody tr:last-child td {
 
 .login__register a:hover {
   text-decoration: underline;
+}
+
+.login-flex {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+}
+
+.exit-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--white-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.exit-button:hover {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 @media screen and (min-width: 576px) {

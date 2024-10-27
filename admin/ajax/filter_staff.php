@@ -2,6 +2,8 @@
 session_start();
 include_once '../../connectdb.php';
 
+$currentUserId = $_SESSION['staff']['id'];
+
 $roleFilter = isset($_GET['role']) ? $_GET['role'] : 'all';
 $roleName = 'All Staff';
 
@@ -20,7 +22,7 @@ if ($roleFilter == 'admin') {
 }
 
 $result = mysqli_query($conn, $sql);
-$output = '<h2>View ' . $roleName . '</h2>';
+$output = '<h2>' . $roleName . '</h2>';
 $output .= '<table><thead><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th></tr></thead><tbody>';
 
 if ($result->num_rows > 0) {
@@ -30,10 +32,14 @@ if ($result->num_rows > 0) {
         $output .= "<td>" . $row['first_name'] . "</td>";
         $output .= "<td>" . $row['last_name'] . "</td>";
         $output .= "<td>" . $row['email'] . "</td>";
-        $output .= "<td>" . roleDropdown($row['role'], $row['staff_user_id'], $row['first_name'] . ' ' . $row['last_name']) . "</td>";
-        $output .= "<td>" . statusDropdown($row['status'], $row['staff_user_id'], $row['first_name'] . ' ' . $row['last_name']) . "</td>";
+        $output .= "<td>" . roleDropdown($row['role'], $row['staff_user_id'], $row['first_name'] . ' ' . $row['last_name'], $currentUserId) . "</td>";
+        $output .= "<td>" . statusDropdown($row['status'], $row['staff_user_id'], $row['first_name'] . ' ' . $row['last_name'], $currentUserId) . "</td>";
         $output .= "<td>";
-        $output .= "<a href='#' class='btn-danger' onclick='deleteStaff(\"" . $row['staff_user_id'] . "\", \"" . $row['first_name'] . " " . $row['last_name'] . "\",\"" . $row['role'] . "\")'>Delete</a>";
+        if ($row['staff_user_id'] == $currentUserId) {
+            $output .= "<button class='btn-danger' disabled>Delete</button>";
+        } else {
+            $output .= "<a href='#' class='btn-danger' onclick='deleteStaff(\"" . $row['staff_user_id'] . "\", \"" . $row['first_name'] . " " . $row['last_name'] . "\", \"" . $row['role'] . "\")'>Delete</a>";
+        }
         $output .= "</td>";
         $output .= "</tr>";
     }
@@ -44,34 +50,49 @@ if ($result->num_rows > 0) {
 $output .= '</tbody></table>';
 echo $output;
 
-function roleDropdown($currentRole, $userId, $fullName)
+function roleDropdown($currentRole, $userId, $fullName, $currentUserId)
 {
     $roles = ['admin', 'manager', 'staff'];
     $roleDropdown = '<div class="dropdown-wrapper">';
-    $roleDropdown .= '<select class="staff-table" onchange="changeUserRole(this.value, ' . $userId . ', \'' . addslashes($fullName) . '\', this)" data-original-value="' . $currentRole . '">';
-    foreach ($roles as $role) {
-        $selected = ($role === $currentRole) ? 'selected' : '';
-        $roleDropdown .= '<option value="' . $role . '" ' . $selected . '>' . ucfirst($role) . '</option>';
+
+    if ($userId == $currentUserId) {
+        $roleDropdown .= '<select class="staff-table" disabled>';
+        $roleDropdown .= "<option value='$currentRole' selected>" . ucfirst($currentRole) . "</option>";
+        $roleDropdown .= "</select>";
+    } else {
+        $roleDropdown .= '<select class="staff-table" onchange="changeUserRole(this.value, ' . $userId . ', \'' . addslashes($fullName) . '\', this)" data-original-value="' . $currentRole . '">';
+        foreach ($roles as $role) {
+            $roleDropdown .= "<option value='$role' " . ($currentRole === $role ? 'selected' : '') . ">" . ucfirst($role) . "</option>";
+        }
+        $roleDropdown .= "</select>";
+        $roleDropdown .= "<span class='dropdown-arrow'>&#9662;</span>";
     }
-    $roleDropdown .= "</select>";
-    $roleDropdown .= "<span class='dropdown-arrow'>&#9662;</span>";
+
     $roleDropdown .= "</div>";
     return $roleDropdown;
 }
 
-function statusDropdown($currentStatus, $userId, $fullName)
+
+function statusDropdown($currentStatus, $userId, $fullName, $currentUserId)
 {
     $allstatus = ['active', 'inactive', 'suspended'];
     $statusDropdown = '<div class="dropdown-wrapper">';
-    $statusDropdown .= '<select class="staff-table" onchange="changeUserStatus(this.value, ' . $userId . ', \'' . addslashes($fullName) . '\', this)" data-original-value="' . $currentStatus . '">';
-    foreach ($allstatus as $status) {
-        $selected = ($status === $currentStatus) ? 'selected' : '';
-        $statusDropdown .= '<option value="' . $status . '" ' . $selected . '>' . ucfirst($status) . '</option>';
+
+    if ($userId == $currentUserId) {
+        $statusDropdown .= '<select class="staff-table" disabled>';
+        $statusDropdown .= "<option value='$currentStatus' selected>" . ucfirst($currentStatus) . "</option>";
+        $statusDropdown .= "</select>";
+    } else {
+        $statusDropdown .= '<select class="staff-table" onchange="changeUserStatus(this.value, ' . $userId . ', \'' . addslashes($fullName) . '\', this)" data-original-value="' . $currentStatus . '">';
+        foreach ($allstatus as $status) {
+            $statusDropdown .= "<option value='$status' " . ($currentStatus === $status ? 'selected' : '') . ">" . ucfirst($status) . "</option>";
+        }
+        $statusDropdown .= "</select>";
+        $statusDropdown .= "<span class='dropdown-arrow'>&#9662;</span>";
     }
-    $statusDropdown .= "</select>";
-    $statusDropdown .= "<span class='dropdown-arrow'>&#9662;</span>";
+
     $statusDropdown .= "</div>";
     return $statusDropdown;
 }
-?>
 
+?>

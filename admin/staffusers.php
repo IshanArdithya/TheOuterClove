@@ -27,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Outer Clover Restaurant</title>
 
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-wvw1PZt5STwCrZ6xGq+GSE1a5/Sp5j+oN8t02kGGtWQdIzApkzt+ub7svD3Wt5z1hJS/VRuKhKoAO1t32k8sKw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
@@ -45,6 +44,65 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
         <div>
         </div>
         <main>
+            <div class="recents space-between">
+                <h2>Add Staff</h2>
+                <form id="addproducts-form" method="post" enctype="multipart/form-data">
+                    <div class="form-container">
+                        <div class="form-inputs">
+                            <div class="form-inputs-row-container">
+                                <div class="form-inputs-row">
+                                    <label for="addstaff_firstname">First Name:</label>
+                                    <input type="text" id="addstaff_firstname" name="staff_firstname" minlength="3"
+                                        maxlength="35" required>
+                                </div>
+
+                                <div class="form-inputs-row">
+                                    <label for="addstaff_lastname">Last Name:</label>
+                                    <input type="text" id="addstaff_lastname" name="staff_lastname" minlength="3"
+                                        maxlength="35" required>
+                                </div>
+                            </div>
+
+                            <label for="addstaff_email">Email:</label>
+                            <input type="email" id="addstaff_email" name="staff_email" minlength="3" maxlength="35"
+                                required>
+
+                            <label for="addstaff_password">Password:</label>
+                            <input type="password" id="addstaff_password" name="staff_password" minlength="8"
+                                maxlength="35" required>
+
+                            <div class="form-inputs-row-container">
+                                <div class="form-inputs-row">
+                                    <label for="addstaff_role">Role:</label>
+                                    <select id="addstaff_role" name="staff_role" required>
+                                        <option value="" disabled selected>Select Role</option>
+                                        <option value="admin">Admin</option>
+                                        <option value="manager">Manager</option>
+                                        <option value="staff">Staff</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-inputs-row">
+                                    <label for="addstaff_status">Status:</label>
+                                    <select id="addstaff_status" name="staff_status" required>
+                                        <option value="" disabled selected>Select Status</option>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                        <option value="suspended">Suspended</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" name="addstaff_submit">Add Product</button>
+                        </div>
+
+                        <div class="staff-image-preview">
+                            <img src="../images/assets/add-staff.png" alt="Default Image" style="max-width: 100%; height: auto;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             <div class="staff-filter">
                 <h3>Filter By Role</h3>
                 <span class="staff-filter-label filter-active" onclick="filterTable('all', this)">All</span>
@@ -75,25 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
             ?>
 
             <div class="recents" id="staffTableContainer">
-                <div class="staff-table">
-                    <h2>View <?php echo $roleName; ?></h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="staffTableBody">
-                            <!-- filter_staff.php -->
-                        </tbody>
-                    </table>
-                </div>
+                <!-- filter_staff.php -->
             </div>
 
         </main>
@@ -101,6 +141,66 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
 
         </div>
     </div>
+
+    <?php
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['addstaff_submit'])) {
+        $firstName = trim($_POST['staff_firstname']);
+        $lastName = trim($_POST['staff_lastname']);
+        $email = trim($_POST['staff_email']);
+        $password = password_hash(trim($_POST['staff_password']), PASSWORD_DEFAULT);
+        $role = $_POST['staff_role'];
+        $status = $_POST['staff_status'];
+
+        $checkEmailSql = "SELECT email FROM staff_users WHERE email = ?";
+        $checkEmailStmt = $conn->prepare($checkEmailSql);
+        $checkEmailStmt->bind_param("s", $email);
+        $checkEmailStmt->execute();
+        $checkEmailStmt->store_result();
+
+        if ($checkEmailStmt->num_rows > 0) {
+            echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Email Exists',
+                    text: 'This email is already exists. Please use a different email address.',
+                    confirmButtonText: 'OK'
+                });
+              </script>";
+        } else {
+            $sql = "INSERT INTO staff_users (first_name, last_name, email, password, role, status) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssssss", $firstName, $lastName, $email, $password, $role, $status);
+
+            if ($stmt->execute()) {
+                echo "<script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Staff Added',
+                        text: 'The staff member has been added successfully!',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'staffusers.php';
+                        }
+                    });
+                  </script>";
+            } else {
+                echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error: " . $stmt->error . "',
+                        confirmButtonText: 'OK'
+                    });
+                  </script>";
+            }
+            $stmt->close();
+        }
+        $checkEmailStmt->close();
+    }
+
+    ?>
 
     <script>
         function filterTable(role = 'all', element) {
@@ -256,7 +356,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
                                     'User account deleted!',
                                     'success'
                                 ).then(() => {
-                                    location.reload();
+                                    window.location.href = 'staffusers.php';
                                 });
                             } else {
                                 Swal.fire(
@@ -264,7 +364,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
                                     'There was an error',
                                     'error'
                                 ).then(() => {
-                                    location.reload();
+                                    window.location.href = 'staffusers.php';
                                 });
                             }
                         })
@@ -274,7 +374,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
                                 'There was an error with the request.',
                                 'error'
                             ).then(() => {
-                                location.reload();
+                                window.location.href = 'staffusers.php';
                             });
                         });
                 }
@@ -282,11 +382,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
         }
 
     </script>
-
-    <script>
-
-    </script>
-
 
 </body>
 

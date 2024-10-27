@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 12, 2024 at 11:54 PM
+-- Generation Time: Oct 27, 2024 at 04:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `outerclove`
 --
+CREATE DATABASE IF NOT EXISTS `outerclove` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `outerclove`;
 
 -- --------------------------------------------------------
 
@@ -115,7 +117,8 @@ CREATE TABLE `payments` (
   `payment_date` datetime NOT NULL DEFAULT current_timestamp(),
   `amount` decimal(10,2) NOT NULL,
   `payment_method` enum('credit_card','paypal','cash') NOT NULL,
-  `payment_status` enum('pending','completed','failed') NOT NULL DEFAULT 'pending'
+  `payment_status` enum('pending','completed','failed') NOT NULL DEFAULT 'pending',
+  `transaction_id` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -126,9 +129,13 @@ CREATE TABLE `payments` (
 
 CREATE TABLE `products` (
   `product_id` int(11) NOT NULL,
-  `product_title` varchar(255) DEFAULT NULL,
+  `product_title` varchar(255) NOT NULL,
+  `product_category` enum('starters','desserts') NOT NULL,
   `product_description` text DEFAULT NULL,
-  `product_price` decimal(10,2) DEFAULT NULL,
+  `product_price` decimal(10,2) NOT NULL,
+  `original_price` decimal(10,2) DEFAULT NULL,
+  `discount_price` decimal(10,2) DEFAULT NULL,
+  `has_offer` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 if the product has a discount',
   `image_path` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -169,6 +176,13 @@ CREATE TABLE `staff_users` (
   `status` enum('active','inactive','suspended') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `staff_users`
+--
+
+INSERT INTO `staff_users` (`staff_user_id`, `first_name`, `last_name`, `email`, `password`, `role`, `created_at`, `updated_at`, `status`) VALUES
+(13, 'Outer', 'Clove', 'admin@outerclove.com', '$2y$10$e0mRglrkunTLDzHCpFpH5.spSvhRjcT0ietObyWxhQmHkh9ptaoeW', 'admin', '2024-10-27 10:19:03', '2024-10-27 10:19:03', 'active');
+
 -- --------------------------------------------------------
 
 --
@@ -179,7 +193,7 @@ CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
-  `user_email` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `registered_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -257,7 +271,7 @@ ALTER TABLE `staff_users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `email` (`user_email`);
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -315,7 +329,7 @@ ALTER TABLE `reservations`
 -- AUTO_INCREMENT for table `staff_users`
 --
 ALTER TABLE `staff_users`
-  MODIFY `staff_user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `staff_user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `users`

@@ -112,7 +112,6 @@ session_start();
                             </p>
                         </div>
 
-
                         <p class="cart-page-row-spacebetween">
                             <span>Tax
                                 <!-- contents in tippy.js script. tax-info -->

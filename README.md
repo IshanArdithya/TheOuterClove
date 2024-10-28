@@ -29,7 +29,7 @@ This project is a dynamic restaurant website designed to showcase The Outer Clov
 
 ## Getting Started
 
-Follow these instructions to get a copy of the project up and running on your local machine.
+Follow these instructions to clone the project and running on your local machine.
 
 ### Prerequisites
 - **Web Server**

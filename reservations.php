@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     <div id="pagetitle" class="pagetitle layout1"
-        style="background-image: url(https://demo.cmssuperheroes.com/themeforest/cafenod/wp-content/uploads/2021/03/bg-page-title.jpg);">
+        style="background-image: url(images/assets/restaurant-foods.jpg);">
         <div class="page-title-container">
             <div class="page-title-inner">
                 <h1 class="page-title">Reservation</h1>

@@ -266,13 +266,18 @@ main .recents table tbody tr:last-child td {
   color: rgb(255, 255, 255);
   background: rgb(31, 68, 117);
   padding: 8px;
-  margin: 1px;
 }
 
 .btn-primary:hover {
   background-color: #5fc2e4;
   cursor: pointer;
   transition: 0.3s;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  margin: 0 2px;
 }
 
 .btn-secondary,

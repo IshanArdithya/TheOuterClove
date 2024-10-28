@@ -42,7 +42,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 ### Installation
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/OuterCloveRestaurant.git
+   git clone https://github.com/IshanArdithya/TheOuterClove.git
 
 2. **Set up the Database**:
    

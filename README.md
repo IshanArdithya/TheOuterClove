@@ -10,8 +10,7 @@ This project is a dynamic restaurant website designed to showcase The Outer Clov
 - [Installation](#installation)
 - [Usage](#usage)
 - [Payment Integration](#payment-integration)
-
----
+- [Preview](#preview)
 
 ## Features
 
@@ -22,13 +21,11 @@ This project is a dynamic restaurant website designed to showcase The Outer Clov
 - **Reservations**: Users can reserve tables directly through the website.
 - **Contact & Feedback**: A contact form for inquiries and feedback, allowing direct communication with users.
 - **Admin Panel**: Separate dashboards for **Admin**, **Manager**, and **Staff** roles, offering various permissions and management capabilities:
-  - **Reservation Management**: Admins and managers can accept, decline, and view reservations.
+  - **Reservation Management**: Accept, decline, and view reservations.
   - **Product Management**: Add, delete, and view products in the menu.
   - **Inquiries & Feedback**: View and respond to user inquiries and feedback.
   - **Staff Management**: Add and delete staff members, as well as assign or update roles and statuses.
 - **Payment Gateway Integration**: PayPal integration for secure transactions.
-
----
 
 ## Getting Started
 
@@ -39,34 +36,34 @@ Follow these instructions to get a copy of the project up and running on your lo
 - **PHP**
 - **MySQL** for database
 
-### Installation
+## Installation
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/IshanArdithya/TheOuterClove.git
 
-2. **Set up the Database**:
+2. **Move the Project**:
    
+   If you're using XAMPP, move the project folder to the `htdocs` directory.
+
+3. **Start Apache and MySQL**:
+
+   In XAMPP, start Apache and MySQL so you can access the database.
+
+4. **Set Up the Database**:
+
    Import the `outerclove.sql` file into your MySQL database.
 
-3. **Configuration**:
+5. **Configuration**:
 
-   Update the `connectdb.php` file to connect to your database.
+   Update the `connectdb.php` file with your database connection details.
 
-4. **Start the Server**:
+## Usage
 
-   If using XAMPP, move the project to the `htdocs` directory and start Apache.
-
----
-
-### Usage
-
-1. Access the website at `http://localhost/OuterCloveRestaurant` or your server’s URL.
+1. Access the website at `http://localhost/TheOuterClove` or your server’s URL.
 2. Browse through the menu and interact with the cart.
 3. Use the "Order Now" button to place orders.
-4. Make payments via the PayPal integration (sandbox mode available for testing).
+4. Make payments via the PayPal integration (sandbox mode for testing).
 5. Use the **Admin Panel** to manage reservations, products, feedback, and staff roles.
-
----
 
 ## Payment Integration
 
@@ -77,5 +74,14 @@ Follow these steps to configure **PayPal**:
 3. Create `.env` file in the web folder.
 4. Type `PAYPAL_CLIENT_ID=` and place your client ID. It should look like this: `PAYPAL_CLIENT_ID=YOURCLIENTID`.
 
----
+## Preview
 
+![Preview-1](images/previews/preview-1.png)
+
+![Preview-2](images/previews/preview-2.png)
+
+![Preview-3](images/previews/preview-3.png)
+
+![Preview-4](images/previews/preview-4.png)
+
+![Preview-5](images/previews/preview-5.png)

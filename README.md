@@ -8,8 +8,8 @@ This project is a dynamic restaurant website designed to showcase The Outer Clov
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Payment Integration](#payment-integration)
+- [Usage](#usage)
 - [Preview](#preview)
 
 ## Features
@@ -57,14 +57,6 @@ Follow these instructions to clone the project and running on your local machine
 
    Update the `connectdb.php` file with your database connection details.
 
-## Usage
-
-1. Access the website at `http://localhost/TheOuterClove` or your server’s URL.
-2. Browse through the menu and interact with the cart.
-3. Use the "Order Now" button to place orders.
-4. Make payments via the PayPal integration (sandbox mode for testing).
-5. Use the **Admin Panel** to manage reservations, products, feedback, and staff roles.
-
 ## Payment Integration
 
 Follow these steps to configure **PayPal**:
@@ -73,6 +65,14 @@ Follow these steps to configure **PayPal**:
 2. Set up a sandbox account to test transactions.
 3. Create `.env` file in the web folder.
 4. Type `PAYPAL_CLIENT_ID=` and place your client ID. It should look like this: `PAYPAL_CLIENT_ID=YOURCLIENTID`.
+
+## Usage
+
+1. Access the website at `http://localhost/TheOuterClove` or your server’s URL.
+2. Browse through the menu and interact with the cart.
+3. Use the "Order Now" button to place orders.
+4. Make payments via the PayPal integration (sandbox mode for testing).
+5. Use the **Admin Panel** to manage reservations, products, feedback, and staff roles.
 
 ## Preview
 

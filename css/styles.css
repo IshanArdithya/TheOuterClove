@@ -21,7 +21,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   font-family: "Open Sans", Arial, sans-serif;
-  /* <----- Custom Colors -----> */
+  /* <---- Custom Colors ----> */
   --main-theme-color: #f38122;
   --default-color: #fff;
   --main-font-color: #000;
